@@ -5,627 +5,421 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CREATIVE SYSTEMS // RESUME.EXE</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+*{margin:0;padding:0;box-sizing:border-box;}
 
-  body {
-    background: #f0f4ff;
-    color: #0033aa;
-    font-family: 'Courier New', monospace;
-    overflow: hidden;
-    height: 100vh;
-    width: 100vw;
-  }
+body{
+background:#f0f4ff;
+color:#0033aa;
+font-family:'Courier New',monospace;
+overflow:hidden;
+height:100vh;
+width:100vw;
+}
 
-  #matrix-canvas {
-    position: fixed;
-    top: 0; left: 0;
-    z-index: 0;
-    opacity: 0.12;
-  }
+/* MATRIX */
+#matrix-canvas{
+position:fixed;
+top:0;
+left:0;
+z-index:0;
+opacity:.12;
+}
 
-  #three-canvas {
-    position: fixed;
-    top: 0; left: 0;
-    z-index: 1;
-  }
+/* THREE */
+#three-canvas{
+position:fixed;
+top:0;
+left:0;
+z-index:1;
+}
 
-  #ui {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    z-index: 10;
-    pointer-events: none;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    padding: 24px;
-  }
+/* MAIN LAYOUT */
+#main-layout{
+position:fixed;
+top:24px;
+left:24px;
+right:24px;
+bottom:40px;
+display:flex;
+gap:16px;
+align-items:flex-start;
+pointer-events:none;
+z-index:10;
+transition:opacity .35s ease;
+}
 
-  .terminal-box {
-    border: 1px solid #0033aa;
-    background: rgba(255,255,255,0.88);
-    padding: 16px 20px;
-    max-width: 420px;
-    box-shadow: 0 0 18px #0033aa33, inset 0 0 8px #0033aa0a;
-    pointer-events: all;
-  }
+#main-layout.hidden{
+opacity:0;
+pointer-events:none;
+}
 
-  .terminal-box:hover {
-    box-shadow: 0 0 30px #0033aa55, inset 0 0 12px #0033aa18;
-  }
+.left-panel{
+flex:1;
+pointer-events:all;
+max-height:100%;
+overflow-y:auto;
+}
 
-  .terminal-label {
-    font-size: 10px;
-    color: #0033aa88;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    margin-bottom: 8px;
-    border-bottom: 1px solid #0033aa33;
-    padding-bottom: 6px;
-  }
+.right-panel{
+width:260px;
+flex-shrink:0;
+pointer-events:all;
+}
 
-  .terminal-title {
-    font-size: 26px;
-    font-weight: bold;
-    letter-spacing: 4px;
-    text-shadow: 0 0 10px #0033aa66, 0 0 20px #0033aa33;
-    margin-bottom: 4px;
-  }
+/* TERMINAL BOX */
 
-  .terminal-sub {
-    font-size: 12px;
-    color: #0033aa99;
-    letter-spacing: 2px;
-  }
+.terminal-box{
+border:1px solid #0033aa;
+background:rgba(255,255,255,.9);
+padding:16px 20px;
+box-shadow:0 0 18px #0033aa33,inset 0 0 8px #0033aa0a;
+}
 
-  .blink { animation: blink 1.2s step-end infinite; }
-  @keyframes blink { 50% { opacity: 0; } }
+.terminal-label{
+font-size:10px;
+color:#0033aa88;
+letter-spacing:3px;
+text-transform:uppercase;
+margin-bottom:8px;
+border-bottom:1px solid #0033aa33;
+padding-bottom:6px;
+}
 
-  .section-title {
-    font-size: 11px;
-    color: #0033aacc;
-    letter-spacing: 3px;
-    margin-bottom: 10px;
-    text-transform: uppercase;
-  }
+.terminal-title{
+font-size:26px;
+font-weight:bold;
+letter-spacing:4px;
+margin-bottom:4px;
+text-shadow:0 0 10px #0033aa66;
+}
 
-  .skill-bar {
-    display: flex;
-    align-items: center;
-    margin-bottom: 6px;
-    font-size: 11px;
-    gap: 10px;
-  }
+.terminal-sub{
+font-size:12px;
+color:#0033aa99;
+letter-spacing:2px;
+}
 
-  .skill-name { width: 110px; color: #0033aabb; }
+.exp-item{
+margin-bottom:12px;
+font-size:11px;
+line-height:1.6;
+border-left:2px solid #0033aa44;
+padding-left:10px;
+}
 
-  .bar-track {
-    flex: 1;
-    height: 6px;
-    background: #0033aa18;
-    border: 1px solid #0033aa44;
-  }
+.exp-role{color:#0033aa;font-weight:bold;}
+.exp-company{color:#0033aa88;}
+.exp-desc{color:#0033aa66;font-size:10px;}
 
-  .bar-fill {
-    height: 100%;
-    background: #0033aa;
-    box-shadow: 0 0 6px #0033aa55;
-    width: 0;
-    transition: width 1.8s ease;
-  }
+.divider{
+border-top:1px solid #0033aa22;
+margin:8px 0;
+}
 
-  .skill-pct { width: 36px; text-align: right; font-size: 10px; color: #0033aa88; }
+.contact-row{
+display:flex;
+flex-direction:column;
+gap:6px;
+}
 
-  .exp-item {
-    margin-bottom: 10px;
-    font-size: 11px;
-    line-height: 1.6;
-    border-left: 2px solid #0033aa44;
-    padding-left: 10px;
-  }
+.contact-item{
+font-size:11px;
+color:#0033aa99;
+display:flex;
+gap:6px;
+}
 
-  .exp-role { color: #0033aa; font-weight: bold; letter-spacing: 1px; }
-  .exp-company { color: #0033aa88; }
-  .exp-desc { color: #0033aa66; font-size: 10px; margin-top: 2px; }
+.icon-link{
+display:flex;
+align-items:center;
+gap:8px;
+color:#0033aa99;
+text-decoration:none;
+font-size:11px;
+}
 
-  .contact-row {
-    display: flex;
-    gap: 16px;
-    flex-wrap: wrap;
-  }
+.icon-link:hover{
+color:#0033aa;
+}
 
-  .contact-item {
-    font-size: 11px;
-    color: #0033aa99;
-    letter-spacing: 1px;
-    display: flex;
-    gap: 6px;
-    align-items: center;
-  }
+/* IDENTITY PANEL */
 
-  .contact-item span:first-child { color: #0033aa55; }
+#identity-panel{
+position:fixed;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%) scale(.96);
+max-width:420px;
+z-index:20;
+opacity:0;
+pointer-events:none;
+transition:opacity .35s ease,transform .35s ease;
+}
 
-  .glitch {
-    animation: glitch 4s infinite;
-  }
+#identity-panel.visible{
+opacity:1;
+pointer-events:all;
+transform:translate(-50%,-50%) scale(1);
+}
 
-  @keyframes glitch {
-    0%, 94%, 100% { text-shadow: 0 0 10px #0033aa66, 0 0 20px #0033aa33; }
-    95% { text-shadow: -2px 0 #0033aa, 2px 0 #00aaff, 0 0 20px #00cfff; transform: skewX(-2deg); }
-    97% { text-shadow: 2px 0 #0033aa, -2px 0 #00aaff, 0 0 20px #00cfff; transform: skewX(1deg); }
-  }
+.skill-list{
+font-size:10px;
+color:#0033aa88;
+line-height:1.9;
+margin-top:6px;
+}
 
-  .bottom-row {
-    display: flex;
-    gap: 16px;
-    align-items: flex-end;
-    justify-content: space-between;
-  }
-
-  .top-row {
-    display: flex;
-    gap: 16px;
-    align-items: flex-start;
-    justify-content: space-between;
-  }
-
-  #model-hint {
-    font-size: 10px;
-    color: #0033aa55;
-    letter-spacing: 2px;
-    text-align: center;
-    position: fixed;
-    bottom: 16px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 20;
-    pointer-events: none;
-  }
-
-  .tag {
-    display: inline-block;
-    border: 1px solid #0033aa44;
-    padding: 2px 8px;
-    font-size: 9px;
-    letter-spacing: 2px;
-    color: #0033aa88;
-    margin: 2px;
-  }
-
-  .tags { margin-top: 6px; }
-
-  /* ─── IDENTITY PANEL (hidden, toggle on model click) ─── */
-  #identity-panel {
-    position: fixed;
-    top: 24px; left: 24px;
-    max-width: 360px;
-    z-index: 15;
-    opacity: 0;
-    pointer-events: none;
-    transform: translateY(-8px);
-    transition: opacity 0.3s ease, transform 0.3s ease;
-  }
-  #identity-panel.visible {
-    opacity: 1;
-    pointer-events: all;
-    transform: translateY(0);
-  }
-  .skill-list {
-    font-size: 10px;
-    color: #0033aa88;
-    line-height: 2;
-    margin-top: 6px;
-    letter-spacing: 0.5px;
-  }
-  .click-hint {
-    font-size: 9px;
-    color: #0033aa44;
-    letter-spacing: 2px;
-    margin-top: 10px;
-  }
-
-  /* ─── MAIN LAYOUT ─── */
-  #main-layout {
-    position: fixed;
-    top: 24px; left: 24px; right: 24px; bottom: 40px;
-    display: flex;
-    gap: 16px;
-    align-items: flex-start;
-    pointer-events: none;
-    z-index: 10;
-  }
-  .left-panel {
-    flex: 1;
-    pointer-events: all;
-    max-height: 100%;
-    overflow-y: auto;
-    scrollbar-width: thin;
-    scrollbar-color: #0033aa33 transparent;
-  }
-  .left-panel::-webkit-scrollbar { width: 4px; }
-  .left-panel::-webkit-scrollbar-thumb { background: #0033aa33; border-radius: 2px; }
-  .right-panel {
-    width: 255px;
-    flex-shrink: 0;
-    pointer-events: all;
-  }
-  .divider {
-    border-top: 1px solid #0033aa22;
-    margin: 8px 0 6px;
-  }
-  .icon-link {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    color: #0033aa99;
-    text-decoration: none;
-    font-size: 11px;
-    letter-spacing: 1px;
-    transition: color 0.2s;
-  }
-  .icon-link:hover { color: #0033aa; }
-  .icon-link i { font-size: 13px; color: #0033aacc; width: 14px; }
+#model-hint{
+font-size:10px;
+color:#0033aa55;
+letter-spacing:2px;
+text-align:center;
+position:fixed;
+bottom:16px;
+left:50%;
+transform:translateX(-50%);
+z-index:20;
+}
 </style>
 </head>
+
 <body>
 
-<!-- Matrix rain canvas -->
 <canvas id="matrix-canvas"></canvas>
-
-<!-- Three.js scene canvas -->
 <canvas id="three-canvas"></canvas>
 
-<!-- Identity panel — hidden, toggled by clicking the 3D character -->
 <div id="identity-panel" class="terminal-box">
-  <div class="terminal-label">// identity.exe &nbsp;<span style="font-size:9px;opacity:0.5;">[ click character to close ]</span></div>
-  <div class="terminal-title glitch">ANDREA MONTANA</div>
-  <div class="terminal-sub">CS &amp; AI &nbsp;&bull;&nbsp; CREATIVE SYSTEMS DESIGNER &nbsp;&bull;&nbsp; MADRID <span class="blink">_</span></div>
-  <div style="margin-top:8px; font-size:10px; color:#0033aa99; line-height:1.7;">
-    Connecting digital ecosystems with lived experiences through spatial computing research and creative systems design.
-  </div>
-  <div class="terminal-label" style="margin-top:12px; margin-bottom:4px;">// skills.dat</div>
-  <div class="skill-list">
-    C &bull; Python &bull; Java &bull; TypeScript &bull; HTML / CSS &bull; Blender &bull; Three.js &bull; Spatial Computing &bull; VR / XR &bull; OptiTrack &bull; Machine Learning &bull; Artificial Intelligence &bull; Algorithms &bull; Data Structures &bull; MySQL &bull; Docker &bull; Fullstack &bull; Cloud Computing &bull; Canva &bull; Affinity &bull; Video Production
-  </div>
+
+<div class="terminal-label">// identity.exe</div>
+<div class="terminal-title">ANDREA MONTANA</div>
+<div class="terminal-sub">CS & AI • CREATIVE SYSTEMS DESIGNER • MADRID</div>
+
+<div style="margin-top:8px;font-size:10px;color:#0033aa99;line-height:1.7;">
+Connecting digital ecosystems with lived experiences through spatial computing research and creative systems design.
 </div>
 
-<!-- Main layout: full-height left + right -->
+<div class="terminal-label" style="margin-top:12px;">// skills.dat</div>
+
+<div class="skill-list">
+C • Python • Java • TypeScript • HTML/CSS • Blender • Three.js • Spatial Computing • XR/VR • Machine Learning • AI • Algorithms • MySQL • Docker • Cloud
+</div>
+
+</div>
+
 <div id="main-layout">
 
-  <!-- LEFT: Experience + Education -->
-  <div class="terminal-box left-panel">
-    <div class="terminal-label">// experience.log</div>
+<div class="terminal-box left-panel">
 
-    <div class="exp-item">
-      <div class="exp-role">ROBOTICS LAB ASSISTANT</div>
-      <div class="exp-company">IE CYPHY LIFE &mdash; OCT 2025 &ndash; PRESENT</div>
-      <div class="exp-desc">Spatial computing research &bull; OptiTrack motion capture &bull; Blender 3D asset management &bull; A/V production</div>
-    </div>
+<div class="terminal-label">// experience.log</div>
 
-    <div class="exp-item">
-      <div class="exp-role">AI &amp; DESIGN &mdash; IE UNIVERSITY PROJECTS 112 &amp; 114</div>
-      <div class="exp-company">GLOBAL MARKETS &amp; COUNSELING &mdash; JUN &ndash; OCT 2025</div>
-      <div class="exp-desc">Fine-tuned AI for internal resource streamlining &bull; designed university outreach assets</div>
-    </div>
+<div class="exp-item">
+<div class="exp-role">ROBOTICS LAB ASSISTANT</div>
+<div class="exp-company">IE CYPHY LIFE — OCT 2025 – PRESENT</div>
+<div class="exp-desc">
+Spatial computing research • OptiTrack motion capture • Blender asset management
+</div>
+</div>
 
-    <div class="divider"></div>
-    <div class="terminal-label" style="margin-bottom:6px;">// education.dat</div>
+<div class="exp-item">
+<div class="exp-role">AI & DESIGN</div>
+<div class="exp-company">IE UNIVERSITY PROJECTS</div>
+<div class="exp-desc">
+Fine-tuned AI models for internal systems and outreach design
+</div>
+</div>
 
-    <div class="exp-item">
-      <div class="exp-role">B.S. COMPUTER SCIENCE</div>
-      <div class="exp-company">IE UNIVERSITY, MADRID &mdash; 2023 &ndash; 2027 &nbsp;&bull;&nbsp; HIGH POTENTIAL SCHOLARSHIP</div>
-      <div class="exp-desc">Machine Learning &bull; Artificial Intelligence &bull; Fullstack &bull; Cloud Computing &bull; Active IE Connects attendee</div>
-    </div>
+<div class="divider"></div>
 
-    <div class="exp-item">
-      <div class="exp-role">EXCHANGE SEMESTER &mdash; TRINITY COLLEGE DUBLIN</div>
-      <div class="exp-company">AUG &ndash; DEC 2022</div>
-      <div class="exp-desc">CSU11001 &bull; CSU11011 &bull; CSU11021 &bull; CSU11027 &bull; CSU11031 &bull; CSU11081</div>
-    </div>
+<div class="terminal-label">// education.dat</div>
 
-    <div class="divider"></div>
-    <div class="terminal-label" style="margin-bottom:6px;">// certificates.dat</div>
-
-    <div class="exp-item">
-      <div class="exp-role">OIL &amp; GAS INDUSTRY OPERATIONS &amp; MARKETS</div>
-      <div class="exp-company">DUKE UNIVERSITY</div>
-    </div>
-  </div>
-
-  <!-- RIGHT: Contact -->
-  <div class="terminal-box right-panel">
-    <div class="terminal-label">// contact.cfg</div>
-    <div class="contact-row">
-      <div class="contact-item"><span>EMAIL</span><span>amontana.ieu2023@student.ie.edu</span></div>
-      <div class="contact-item" style="margin-top:6px;">
-        <a href="https://www.linkedin.com/in/andrea-isabel-montana/" target="_blank" class="icon-link">
-          <i class="fab fa-linkedin"></i><span>andrea-isabel-montana</span>
-        </a>
-      </div>
-      <div class="contact-item" style="margin-top:4px;">
-        <a href="https://github.com/andreaisabelmontana" target="_blank" class="icon-link">
-          <i class="fab fa-github"></i><span>andreaisabelmontana</span>
-        </a>
-      </div>
-      <div class="contact-item" style="margin-top:6px;"><span>LOC</span><span>MADRID &bull; BOGOTÁ ROOTS</span></div>
-      <div class="contact-item"><span>LANG</span><span>ES (NATIVE) &bull; EN (FLUENT)</span></div>
-    </div>
-    <div style="margin-top:14px; font-size:9px; color:#0033aa44; letter-spacing:2px;">
-      [ CLICK CHARACTER TO VIEW PROFILE ]
-    </div>
-  </div>
+<div class="exp-item">
+<div class="exp-role">B.S. COMPUTER SCIENCE</div>
+<div class="exp-company">IE UNIVERSITY — 2023-2027</div>
+<div class="exp-desc">
+Machine Learning • Artificial Intelligence • Fullstack • Cloud
+</div>
+</div>
 
 </div>
 
-<div id="model-hint">DRAG TO ROTATE &nbsp;|&nbsp; SCROLL TO ZOOM &nbsp;|&nbsp; CLICK MODEL TO INSPECT</div>
+<div class="terminal-box right-panel">
 
-<!-- Scripts -->
+<div class="terminal-label">// contact.cfg</div>
+
+<div class="contact-row">
+
+<div class="contact-item">
+<span>EMAIL</span>
+<span>amontana.ieu2023@student.ie.edu</span>
+</div>
+
+<a href="https://github.com/" class="icon-link">
+<i class="fab fa-github"></i> github
+</a>
+
+<a href="https://linkedin.com/" class="icon-link">
+<i class="fab fa-linkedin"></i> linkedin
+</a>
+
+<div class="contact-item">
+<span>LOC</span>
+<span>Madrid • Bogotá</span>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<div id="model-hint">
+DRAG TO ROTATE | SCROLL TO ZOOM | CLICK MODEL
+</div>
+
 <script type="importmap">
 {
-  "imports": {
-    "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js",
-    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"
-  }
+"imports":{
+"three":"https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js",
+"three/addons/":"https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"
+}
 }
 </script>
 
 <script type="module">
-import * as THREE from 'three';
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
-// ─── MATRIX RAIN ──────────────────────────────────────────────────────────────
-const rainCanvas = document.getElementById('matrix-canvas');
-const rc = rainCanvas.getContext('2d');
+import * as THREE from "three";
+import {OrbitControls} from "three/addons/controls/OrbitControls.js";
+import {GLTFLoader} from "three/addons/loaders/GLTFLoader.js";
 
-function resizeRain() {
-  rainCanvas.width = window.innerWidth;
-  rainCanvas.height = window.innerHeight;
+/* MATRIX */
+
+const rainCanvas=document.getElementById("matrix-canvas");
+const rc=rainCanvas.getContext("2d");
+
+function resizeRain(){
+rainCanvas.width=window.innerWidth;
+rainCanvas.height=window.innerHeight;
 }
 resizeRain();
 
-const chars = 'アイウエオカキクケコサシスセソタチツテトナニヌネノ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ@#$%&';
-const fontSize = 14;
-let columns = Math.floor(window.innerWidth / fontSize);
-let drops = Array(columns).fill(1);
+const chars="アイウエオカキクケコ0123456789ABCDEF";
+const fontSize=14;
+let columns=Math.floor(window.innerWidth/fontSize);
+let drops=Array(columns).fill(1);
 
-function drawRain() {
-  rc.fillStyle = 'rgba(240,244,255,0.06)';
-  rc.fillRect(0, 0, rainCanvas.width, rainCanvas.height);
-  rc.fillStyle = '#0033aa';
-  rc.font = fontSize + 'px Courier New';
-  for (let i = 0; i < drops.length; i++) {
-    const ch = chars[Math.floor(Math.random() * chars.length)];
-    rc.fillStyle = drops[i] * fontSize < rainCanvas.height * 0.2 ? '#ffffff' : '#0033aa';
-    rc.fillText(ch, i * fontSize, drops[i] * fontSize);
-    if (drops[i] * fontSize > rainCanvas.height && Math.random() > 0.975) drops[i] = 0;
-    drops[i]++;
-  }
+function drawRain(){
+rc.fillStyle="rgba(240,244,255,0.06)";
+rc.fillRect(0,0,rainCanvas.width,rainCanvas.height);
+rc.fillStyle="#0033aa";
+rc.font=fontSize+"px Courier";
+
+for(let i=0;i<drops.length;i++){
+const text=chars[Math.floor(Math.random()*chars.length)];
+rc.fillText(text,i*fontSize,drops[i]*fontSize);
+
+if(drops[i]*fontSize>rainCanvas.height&&Math.random()>.975)
+drops[i]=0;
+
+drops[i]++;
 }
-setInterval(drawRain, 45);
-
-// ─── THREE.JS SCENE ───────────────────────────────────────────────────────────
-const threeCanvas = document.getElementById('three-canvas');
-const renderer = new THREE.WebGLRenderer({ canvas: threeCanvas, antialias: true, alpha: true });
-renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-renderer.shadowMap.enabled = true;
-renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.2;
-
-const scene = new THREE.Scene();
-scene.background = new THREE.Color(0xf0f4ff);
-const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.01, 1000);
-camera.position.set(0, 1.5, 5);
-
-const controls = new OrbitControls(camera, threeCanvas);
-controls.enableDamping = true;
-controls.dampingFactor = 0.05;
-controls.minDistance = 1.5;
-controls.maxDistance = 12;
-controls.target.set(0, 0.8, 0);
-controls.maxPolarAngle = Math.PI * 0.85;
-
-// Lighting — bright enough to show poly colors clearly
-const ambientLight = new THREE.AmbientLight(0xffffff, 1.8);
-scene.add(ambientLight);
-
-const mainLight = new THREE.DirectionalLight(0xffffff, 2.4);
-mainLight.position.set(4, 6, 4);
-mainLight.castShadow = true;
-mainLight.shadow.mapSize.set(1024, 1024);
-scene.add(mainLight);
-
-const fillLight = new THREE.DirectionalLight(0xddeeff, 1.6);
-fillLight.position.set(-4, 3, 2);
-scene.add(fillLight);
-
-const rimLight = new THREE.DirectionalLight(0xaaccff, 1.2);
-rimLight.position.set(0, 4, -5);
-scene.add(rimLight);
-
-// Grid floor
-const gridHelper = new THREE.GridHelper(20, 30, 0x99bbee, 0xddeeff);
-gridHelper.position.y = -0.01;
-scene.add(gridHelper);
-
-// Particle field
-const particleGeo = new THREE.BufferGeometry();
-const particleCount = 600;
-const positions = new Float32Array(particleCount * 3);
-for (let i = 0; i < particleCount * 3; i++) {
-  positions[i] = (Math.random() - 0.5) * 20;
 }
-particleGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-const particleMat = new THREE.PointsMaterial({
-  color: 0x2244cc,
-  size: 0.04,
-  transparent: true,
-  opacity: 0.5,
-});
-const particles = new THREE.Points(particleGeo, particleMat);
-scene.add(particles);
+setInterval(drawRain,45);
 
-// Matrix overlay material helper
-function matrixify(mat) {
-  mat.color = new THREE.Color(0x2244cc);
-  mat.emissive = new THREE.Color(0x99bbee);
-  mat.emissiveIntensity = 0.3;
-  mat.metalness = 0.1;
-  mat.roughness = 0.6;
-}
+/* THREE */
 
-// Load models
-const loader = new GLTFLoader();
-let hoveredModel = null;
-const loadedModels = [];
+const canvas=document.getElementById("three-canvas");
+const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});
+renderer.setSize(window.innerWidth,window.innerHeight);
 
-loader.load('assets/lowpoly_female.glb', (gltf) => {
-  const model = gltf.scene;
+const scene=new THREE.Scene();
 
-  // Normalize scale and center
-  const box = new THREE.Box3().setFromObject(model);
-  const size = box.getSize(new THREE.Vector3());
-  const center = box.getCenter(new THREE.Vector3());
-  const maxDim = Math.max(size.x, size.y, size.z);
-  const scale = 2.2 / maxDim;
-  model.scale.setScalar(scale);
-  model.position.set(-center.x * scale, -box.min.y * scale, -center.z * scale);
+const camera=new THREE.PerspectiveCamera(
+45,
+window.innerWidth/window.innerHeight,
+.1,
+1000
+);
 
-  // Keep original poly colors, just boost contrast and add subtle blue rim
-  model.traverse((child) => {
-    if (child.isMesh) {
-      child.castShadow = true;
-      child.receiveShadow = true;
-      if (child.material) {
-        const mats = Array.isArray(child.material) ? child.material : [child.material];
-        mats.forEach(m => {
-          if (m.isMeshStandardMaterial || m.isMeshPhongMaterial || m.isMeshBasicMaterial) {
-            // Keep original color, just saturate slightly toward blue
-            const hsl = {};
-            m.color.getHSL(hsl);
-            m.color.setHSL(hsl.h, Math.min(1, hsl.s * 1.4 + 0.1), Math.min(0.95, hsl.l * 1.1));
-            if (m.isMeshStandardMaterial || m.isMeshPhongMaterial) {
-              m.emissive = new THREE.Color(0x112244);
-              m.emissiveIntensity = 0.15;
-              m.roughness = 0.85;
-              m.metalness = 0.05;
-            }
-          }
-        });
-      }
-    }
-  });
+camera.position.set(0,1.5,5);
 
-  // Label sprite
-  const canvas2 = document.createElement('canvas');
-  canvas2.width = 320; canvas2.height = 48;
-  const ctx2 = canvas2.getContext('2d');
-  ctx2.clearRect(0, 0, 320, 48);
-  ctx2.strokeStyle = '#0033aa';
-  ctx2.lineWidth = 1;
-  ctx2.strokeRect(1, 1, 318, 46);
-  ctx2.font = 'bold 14px Courier New';
-  ctx2.fillStyle = '#0033aa';
-  ctx2.textAlign = 'center';
-  ctx2.fillText('ANDREA MONTANA', 160, 30);
-  const tex = new THREE.CanvasTexture(canvas2);
-  const spriteMat = new THREE.SpriteMaterial({ map: tex, transparent: true });
-  const sprite = new THREE.Sprite(spriteMat);
-  sprite.scale.set(1.8, 0.28, 1);
-  sprite.position.set(0, size.y * scale + 0.4, 0);
-  scene.add(sprite);
+const controls=new OrbitControls(camera,canvas);
+controls.enableDamping=true;
+controls.target.set(0,.8,0);
 
-  scene.add(model);
-  loadedModels.push({ model, baseY: model.position.y, phase: 0 });
+scene.add(new THREE.AmbientLight(0xffffff,1.6));
 
-  // Animate in
-  model.scale.setScalar(0);
-  let t = 0;
-  const animIn = setInterval(() => {
-    t += 0.04;
-    const s = scale * Math.min(1, t * t * (3 - 2 * t));
-    model.scale.setScalar(s);
-    if (t >= 1) clearInterval(animIn);
-  }, 16);
-}, undefined, (err) => console.warn('Load error:', err));
+const light=new THREE.DirectionalLight(0xffffff,2);
+light.position.set(4,6,4);
+scene.add(light);
 
-// Raycaster for hover/click
-const raycaster = new THREE.Raycaster();
-const mouse = new THREE.Vector2();
-let inspecting = false;
+scene.add(new THREE.GridHelper(20,30,0x99bbee,0xddeeff));
 
-threeCanvas.addEventListener('mousemove', (e) => {
-  mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
-  mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+const loader=new GLTFLoader();
+let model;
+
+loader.load("assets/lowpoly_female.glb",(gltf)=>{
+model=gltf.scene;
+model.scale.set(1.2,1.2,1.2);
+scene.add(model);
 });
 
-threeCanvas.addEventListener('click', () => {
-  if (hoveredModel) {
-    inspecting = !inspecting;
-    document.getElementById('identity-panel').classList.toggle('visible');
-    if (inspecting) {
-      controls.target.set(hoveredModel.position.x, hoveredModel.position.y + 0.8, hoveredModel.position.z);
-      controls.minDistance = 0.5;
-    } else {
-      controls.target.set(0, 0.8, 0);
-      controls.minDistance = 1.5;
-    }
-  }
+/* INTERACTION */
+
+const raycaster=new THREE.Raycaster();
+const mouse=new THREE.Vector2();
+
+canvas.addEventListener("mousemove",(e)=>{
+mouse.x=(e.clientX/window.innerWidth)*2-1;
+mouse.y=-(e.clientY/window.innerHeight)*2+1;
 });
 
-// ─── RENDER LOOP ──────────────────────────────────────────────────────────────
-const clock = new THREE.Clock();
+const identityPanel=document.getElementById("identity-panel");
+const mainLayout=document.getElementById("main-layout");
 
-function animate() {
-  requestAnimationFrame(animate);
-  const t = clock.getElapsedTime();
+let inspecting=false;
 
-  // Float models
-  loadedModels.forEach(({ model, baseY, phase }) => {
-    model.position.y = baseY + Math.sin(t * 0.8 + phase) * 0.07;
-    model.rotation.y = Math.sin(t * 0.3 + phase) * 0.12;
-  });
+canvas.addEventListener("click",()=>{
 
-  // Rotate particles
-  particles.rotation.y = t * 0.04;
+if(!model)return;
 
-  // Raycasting for hover glow
-  raycaster.setFromCamera(mouse, camera);
-  const allMeshes = [];
-  loadedModels.forEach(({ model }) => model.traverse(c => { if (c.isMesh) allMeshes.push(c); }));
-  const hits = raycaster.intersectObjects(allMeshes);
-  hoveredModel = hits.length > 0 ? hits[0].object.parent : null;
+raycaster.setFromCamera(mouse,camera);
+const hits=raycaster.intersectObject(model,true);
 
-  // Glow on hover
-  loadedModels.forEach(({ model }) => {
-    const isHovered = hoveredModel && (model === hoveredModel || model.getObjectById(hoveredModel?.id));
-    model.traverse(c => {
-      if (c.isMesh && c.material) {
-        const mats = Array.isArray(c.material) ? c.material : [c.material];
-        mats.forEach(m => {
-          if (m.emissive) m.emissiveIntensity = isHovered ? 0.8 : 0.4;
-        });
-      }
-    });
-  });
+if(hits.length===0)return;
 
-  controls.update();
-  renderer.render(scene, camera);
+inspecting=!inspecting;
+
+if(inspecting){
+identityPanel.classList.add("visible");
+mainLayout.classList.add("hidden");
+controls.target.set(0,.9,0);
+controls.minDistance=.6;
+}else{
+identityPanel.classList.remove("visible");
+mainLayout.classList.remove("hidden");
+controls.target.set(0,.8,0);
+controls.minDistance=1.5;
+}
+
+});
+
+function animate(){
+requestAnimationFrame(animate);
+controls.update();
+renderer.render(scene,camera);
 }
 animate();
 
-// ─── RESIZE ───────────────────────────────────────────────────────────────────
-window.addEventListener('resize', () => {
-  camera.aspect = window.innerWidth / window.innerHeight;
-  camera.updateProjectionMatrix();
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  resizeRain();
-  columns = Math.floor(window.innerWidth / fontSize);
-  drops = Array(columns).fill(1);
+window.addEventListener("resize",()=>{
+camera.aspect=window.innerWidth/window.innerHeight;
+camera.updateProjectionMatrix();
+renderer.setSize(window.innerWidth,window.innerHeight);
+resizeRain();
 });
+
 </script>
+
 </body>
 </html>
