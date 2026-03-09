@@ -18,7 +18,7 @@ body{
 #matrix-canvas{position:fixed;top:0;left:0;z-index:0;opacity:.12;}
 #three-canvas{position:fixed;top:0;left:0;z-index:1;}
 
-/* UI LAYER */
+/* UI LAYER GRID */
 .ui-layer {
     position: fixed;
     top: 0;
@@ -34,8 +34,9 @@ body{
 
 .panel {
     pointer-events: all;
+    width: fit-content;
+    max-width: 420px;
     height: fit-content;
-    max-width: 400px;
     transition: opacity .35s ease, transform .35s ease;
 }
 
@@ -45,12 +46,12 @@ body{
 .terminal-box {
     border: 1px solid #0033aa;
     background: rgba(255,255,255,0.92);
-    padding: 18px 24px;
+    padding: 20px 25px;
     box-shadow: 0 0 15px rgba(0,51,170,0.1);
 }
 
 .terminal-label {
-    font-size: 11px;
+    font-size: 10px;
     color: #0033aa88;
     letter-spacing: 3px;
     text-transform: uppercase;
@@ -62,14 +63,14 @@ body{
 /* CONTENT STYLING */
 .exp-item {
     margin-bottom: 14px;
-    font-size: 12px;
-    line-height: 1.4;
+    font-size: 11px;
+    line-height: 1.5;
     border-left: 2px solid #0033aa44;
     padding-left: 12px;
 }
-.exp-role { color: #0033aa; font-weight: bold; text-transform: uppercase; font-size: 13px; }
-.exp-company { color: #0033aa88; font-size: 11px; margin-bottom: 2px; }
-.exp-desc { color: #0033aa; font-size: 11px; }
+.exp-role { color: #0033aa; font-weight: bold; text-transform: uppercase; font-size: 12px; }
+.exp-company { color: #0033aa88; font-size: 10px; margin-bottom: 2px; }
+.exp-desc { color: #0033aa; font-size: 10px; }
 .divider { border-top: 1px solid #0033aa11; margin: 12px 0; }
 
 .icon-link {
@@ -88,8 +89,8 @@ body{
     bottom: 50px;
     left: 50%;
     transform: translateX(-50%) scale(0.98);
-    width: auto;
-    max-width: 600px;
+    width: fit-content;
+    max-width: 650px;
     z-index: 20;
     opacity: 0;
     pointer-events: none;
@@ -126,17 +127,28 @@ body{
             <div class="exp-company">GLOBAL MARKETS & COUNSELING — JUN – OCT 2025</div>
             <div class="exp-desc">Fine-tuned AI for internal resource streamlining • designed university outreach assets</div>
         </div>
+        
         <div class="divider"></div>
+        
         <div class="terminal-label">// education.dat</div>
         <div class="exp-item">
             <div class="exp-role">B.S. COMPUTER SCIENCE</div>
-            <div class="exp-company">IE UNIVERSITY — 2023 – 2027</div>
-            <div class="exp-desc"><b>HIGH POTENTIAL SCHOLARSHIP</b><br>ML • AI • Fullstack • Cloud Computing</div>
+            <div class="exp-company">IE UNIVERSITY, MADRID — 2023 – 2027</div>
+            <div class="exp-desc"><b>HIGH POTENTIAL SCHOLARSHIP</b><br>Machine Learning • AI • Fullstack • Cloud Computing</div>
         </div>
         <div class="exp-item">
             <div class="exp-role">EXCHANGE SEMESTER</div>
-            <div class="exp-company">TRINITY COLLEGE DUBLIN — 2022</div>
+            <div class="exp-company">TRINITY COLLEGE DUBLIN — AUG – DEC 2022</div>
             <div class="exp-desc">CSU11001 • CSU11011 • CSU11021 • CSU11027 • CSU11031</div>
+        </div>
+        
+        <div class="divider"></div>
+        
+        <div class="terminal-label">// certificates.dat</div>
+        <div class="exp-item">
+            <div class="exp-role">OIL & GAS INDUSTRY</div>
+            <div class="exp-company">DUKE UNIVERSITY</div>
+            <div class="exp-desc">OPERATIONS & MARKETS SPECIALIZATION</div>
         </div>
     </div>
 
@@ -148,15 +160,12 @@ body{
         </div>
         <div class="exp-item">
             <div class="exp-role">UPLINK</div>
-            <a href="#" class="icon-link"><i class="fab fa-github"></i> GITHUB</a><br>
-            <a href="#" class="icon-link"><i class="fab fa-linkedin"></i> LINKEDIN</a>
+            <a href="https://github.com/amontana05" target="_blank" class="icon-link"><i class="fab fa-github"></i> GITHUB/AMONTANA05</a><br>
+            <a href="https://linkedin.com/in/andreamontana" target="_blank" class="icon-link"><i class="fab fa-linkedin"></i> LINKEDIN/ANDREAMONTANA</a>
         </div>
-        <div class="divider"></div>
-        <div class="terminal-label">// certificates.dat</div>
         <div class="exp-item">
-            <div class="exp-role">OIL & GAS INDUSTRY</div>
-            <div class="exp-company">DUKE UNIVERSITY</div>
-            <div class="exp-desc">OPERATIONS & MARKETS</div>
+            <div class="exp-role">LOC</div>
+            <div class="exp-desc">MADRID • BOGOTÁ</div>
         </div>
     </div>
 </div>
@@ -165,9 +174,11 @@ body{
     <div class="terminal-label">// identity.exe</div>
     <div style="font-size: 24px; font-weight: bold; margin-bottom: 4px;">ANDREA MONTANA</div>
     <div style="font-size: 11px; font-weight: bold; margin-bottom: 12px; color: #0033aa99;">CS & AI • CREATIVE SYSTEMS DESIGNER • MADRID_</div>
-    <div class="exp-desc" style="margin-bottom:15px; opacity: 1;">Connecting digital ecosystems with lived experiences through spatial computing research and creative systems design.</div>
+    <div class="exp-desc" style="margin-bottom:15px;">Connecting digital ecosystems with lived experiences through spatial computing research and creative systems design.</div>
     <div class="terminal-label">// skills.dat</div>
-    <div style="font-size:10px; line-height:1.8; opacity:0.8;">C • Python • Java • TypeScript • HTML / CSS • Blender • Three.js • Spatial Computing • VR / XR • Machine Learning • AI • Docker • Fullstack • Cloud</div>
+    <div style="font-size:10px; line-height:1.8; color:#0033aa; opacity:0.8;">
+        C • Python • Java • TypeScript • HTML / CSS • Blender • Three.js • Spatial Computing • VR / XR • OptiTrack • Machine Learning • Artificial Intelligence • Algorithms • Data Structures • MySQL • Docker • Fullstack • Cloud Computing • Canva • Affinity • Video Production
+    </div>
 </div>
 
 <div id="model-hint">DRAG TO ROTATE | CLICK MODEL TO TOGGLE IDENTITY</div>
@@ -191,7 +202,7 @@ const mCanvas = document.getElementById('matrix-canvas');
 const ctx = mCanvas.getContext('2d');
 let w = mCanvas.width = window.innerWidth;
 let h = mCanvas.height = window.innerHeight;
-const chars = "01";
+const chars = "010101";
 const drops = Array(Math.floor(w/20)).fill(1);
 
 function drawMatrix() {
@@ -207,7 +218,7 @@ function drawMatrix() {
     });
 }
 
-// --- THREE.JS ---
+// --- THREE.JS ORIGINAL VISUALS ---
 const canvas = document.getElementById("three-canvas");
 const renderer = new THREE.WebGLRenderer({canvas, alpha: true, antialias: true});
 renderer.setSize(w, h);
@@ -220,23 +231,22 @@ const controls = new OrbitControls(camera, canvas);
 controls.enableDamping = true;
 controls.target.set(0, 0.8, 0);
 
-// Lighting
-scene.add(new THREE.AmbientLight(0xffffff, 1.5));
-const light = new THREE.DirectionalLight(0xffffff, 1.5);
-light.position.set(5, 10, 5);
+scene.add(new THREE.AmbientLight(0xffffff, 1.8));
+const light = new THREE.DirectionalLight(0xffffff, 2);
+light.position.set(4, 6, 4);
 scene.add(light);
 
-// ORIGINAL GRID (Dark Blue)
+// Restored Dark Blue Grid
 const grid = new THREE.GridHelper(20, 40, 0x0033aa, 0x0033aa22);
 scene.add(grid);
 
-// RESTORED FLOATING PARTICLES
-const partCount = 1000;
+// Restored Floating Node Particles
+const partCount = 1500;
 const partGeom = new THREE.BufferGeometry();
 const partPos = new Float32Array(partCount * 3);
 for(let i=0; i<partCount*3; i++) partPos[i] = (Math.random() - 0.5) * 15;
 partGeom.setAttribute('position', new THREE.BufferAttribute(partPos, 3));
-const partMat = new THREE.PointsMaterial({color: 0x0033aa, size: 0.02, transparent: true, opacity: 0.5});
+const partMat = new THREE.PointsMaterial({color: 0x0033aa, size: 0.015, transparent: true, opacity: 0.4});
 const particles = new THREE.Points(partGeom, partMat);
 scene.add(particles);
 
@@ -275,7 +285,7 @@ canvas.addEventListener("click", () => {
 function animate() {
     requestAnimationFrame(animate);
     drawMatrix();
-    particles.rotation.y += 0.001; // Particle drift
+    particles.rotation.y += 0.0008; // Subtle particle drift
     controls.update();
     renderer.render(scene, camera);
 }
