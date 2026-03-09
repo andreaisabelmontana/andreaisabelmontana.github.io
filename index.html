@@ -7,7 +7,12 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { background: #f0f4ff; color: #0033aa; font-family: 'Courier New', monospace; overflow: hidden; }
+    body {
+        background: #f0f4ff;
+        color: #0033aa;
+        font-family: 'Courier New', monospace;
+        overflow: hidden;
+    }
 
     #matrix-canvas { position: fixed; top: 0; left: 0; z-index: 0; opacity: 0.12; }
     #three-canvas { position: fixed; top: 0; left: 0; z-index: 1; }
@@ -18,10 +23,12 @@
         padding: 40px; pointer-events: none;
     }
 
-    /* BOX WRAPPING & COMPILE ANIMATION */
+    /* PERFECT WRAP */
     .panel {
-        pointer-events: all; width: max-content; max-width: 450px;
-        transition: opacity 0.3s ease;
+        pointer-events: all;
+        width: max-content; 
+        max-width: 450px;
+        transition: opacity 0.4s ease, transform 0.4s ease;
     }
 
     .terminal-box {
@@ -29,12 +36,16 @@
         background: rgba(255, 255, 255, 0.95);
         padding: 20px 25px;
         box-shadow: 0 0 15px rgba(0, 51, 170, 0.1);
-        animation: compile 0.5s steps(5, end);
     }
 
-    @keyframes compile {
-        from { opacity: 0; transform: translateY(5px); filter: brightness(2); }
-        to { opacity: 1; transform: translateY(0); filter: brightness(1); }
+    /* COMPILE TRANSITION */
+    .compiling {
+        animation: bootUp 0.6s steps(4);
+    }
+
+    @keyframes bootUp {
+        0% { opacity: 0; transform: translateY(10px); filter: brightness(3); }
+        100% { opacity: 1; transform: translateY(0); filter: brightness(1); }
     }
 
     .hidden { display: none; }
@@ -65,7 +76,7 @@
 <canvas id="three-canvas"></canvas>
 
 <div class="ui-layer">
-    <div id="experience-panel" class="panel terminal-box">
+    <div id="experience-panel" class="panel terminal-box compiling">
         <div class="terminal-label">// experience.log</div>
         <div class="exp-item">
             <div class="exp-role">ROBOTICS LAB ASSISTANT</div>
@@ -91,7 +102,7 @@
         </div>
     </div>
 
-    <div id="contact-panel" class="panel terminal-box">
+    <div id="contact-panel" class="panel terminal-box compiling">
         <div class="terminal-label">// contact.cfg</div>
         <div class="exp-item">
             <div class="exp-role">DIRECT MAIL</div>
@@ -117,7 +128,7 @@
     <div class="terminal-label">// identity.exe</div>
     <div style="font-size: 24px; font-weight: bold;">ANDREA MONTANA</div>
     <div style="font-size: 11px; margin-bottom: 12px; color: #0033aa99;">CS & AI • CREATIVE SYSTEMS DESIGNER</div>
-    <div class="exp-desc">Connecting digital ecosystems with lived experiences.</div>
+    <div class="exp-desc">Connecting digital ecosystems with lived experiences through spatial computing research and creative systems design.</div>
 </div>
 
 <script type="importmap">
@@ -140,15 +151,16 @@ camera.position.set(0, 1.5, 5);
 const controls = new OrbitControls(camera, canvas);
 controls.enableDamping = true;
 
-// LIGHTING FOR NAVY SHADOWS / LIGHT BLUE BASE
-scene.add(new THREE.AmbientLight(0xffffff, 1.2)); 
-const topLight = new THREE.DirectionalLight(0xadd8e6, 2); // Light blue light
-topLight.position.set(0, 5, 5);
-scene.add(topLight);
+// OG LIGHTING RIG
+scene.add(new THREE.AmbientLight(0xffffff, 1.8)); 
+const dLight = new THREE.DirectionalLight(0xffffff, 2.0);
+dLight.position.set(5, 5, 5);
+scene.add(dLight);
 
-const rimLight = new THREE.PointLight(0x000080, 5); // Navy shadows/rim
-rimLight.position.set(0, -2, -2);
-scene.add(rimLight);
+// Navy Point Light for Shadow Depth
+const shadowPoint = new THREE.PointLight(0x000080, 4);
+shadowPoint.position.set(-2, 0, -2);
+scene.add(shadowPoint);
 
 scene.add(new THREE.GridHelper(20, 30, 0x99bbee, 0xddeeff));
 
@@ -159,9 +171,9 @@ loader.load('assets/lowpoly_female.glb', (gltf) => {
     model.traverse(n => {
         if(n.isMesh) {
             n.material = new THREE.MeshStandardMaterial({
-                color: 0xadd8e6, // LIGHT BLUE BASE
-                roughness: 0.5,
-                metalness: 0.2
+                color: 0xddeeff, // Light Blue
+                roughness: 0.4,
+                metalness: 0.1
             });
         }
     });
@@ -171,6 +183,7 @@ loader.load('assets/lowpoly_female.glb', (gltf) => {
 
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
+
 canvas.addEventListener("click", (e) => {
     mouse.x = (e.clientX/window.innerWidth)*2-1;
     mouse.y = -(e.clientY/window.innerHeight)*2+1;
@@ -179,12 +192,16 @@ canvas.addEventListener("click", (e) => {
         document.getElementById('experience-panel').classList.toggle('hidden');
         document.getElementById('contact-panel').classList.toggle('hidden');
         document.getElementById('identity-panel').classList.toggle('hidden');
+        document.getElementById('identity-panel').classList.add('compiling');
     }
 });
 
 function animate() {
     requestAnimationFrame(animate);
-    if(model) model.rotation.y += 0.005;
+    if(model) {
+        model.rotation.y += 0.005;
+        model.position.y = Math.sin(Date.now() * 0.0015) * 0.05;
+    }
     controls.update();
     renderer.render(scene, camera);
 }
