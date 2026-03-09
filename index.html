@@ -15,10 +15,10 @@ body{
 }
 
 /* BACKGROUND LAYERS */
-#matrix-canvas{position:fixed;top:0;left:0;z-index:0;opacity:.15;}
+#matrix-canvas{position:fixed;top:0;left:0;z-index:0;opacity:.12;}
 #three-canvas{position:fixed;top:0;left:0;z-index:1;}
 
-/* LAYOUT SYSTEM */
+/* UI LAYER */
 .ui-layer {
     position: fixed;
     top: 0;
@@ -28,15 +28,14 @@ body{
     z-index: 10;
     display: flex;
     justify-content: space-between;
-    padding: 30px;
+    padding: 40px;
     pointer-events: none;
 }
 
 .panel {
-    width: 380px;
     pointer-events: all;
-    max-height: 85vh;
-    overflow-y: auto;
+    height: fit-content;
+    max-width: 400px;
     transition: opacity .35s ease, transform .35s ease;
 }
 
@@ -45,36 +44,33 @@ body{
 /* TERMINAL BOX STYLING */
 .terminal-box {
     border: 1px solid #0033aa;
-    background: rgba(255,255,255,0.95);
-    padding: 20px;
-    box-shadow: 0 0 20px rgba(0,51,170,0.1);
+    background: rgba(255,255,255,0.92);
+    padding: 18px 24px;
+    box-shadow: 0 0 15px rgba(0,51,170,0.1);
 }
 
 .terminal-label {
-    font-size: 10px;
+    font-size: 11px;
     color: #0033aa88;
     letter-spacing: 3px;
     text-transform: uppercase;
     margin-bottom: 12px;
     border-bottom: 1px solid #0033aa33;
-    padding-bottom: 6px;
+    padding-bottom: 4px;
 }
 
-.terminal-title { font-size: 24px; font-weight: bold; letter-spacing: 2px; }
-.terminal-sub { font-size: 11px; color: #0033aa99; font-weight: bold; margin-bottom: 10px; }
-
-/* SHARED CONTENT STYLING */
+/* CONTENT STYLING */
 .exp-item {
-    margin-bottom: 16px;
-    font-size: 11px;
-    line-height: 1.5;
+    margin-bottom: 14px;
+    font-size: 12px;
+    line-height: 1.4;
     border-left: 2px solid #0033aa44;
     padding-left: 12px;
 }
-.exp-role { color: #0033aa; font-weight: bold; text-transform: uppercase; }
-.exp-company { color: #0033aa88; font-size: 10px; }
-.exp-desc { color: #0033aa; font-size: 10px; opacity: 0.9; }
-.divider { border-top: 1px solid #0033aa22; margin: 15px 0; }
+.exp-role { color: #0033aa; font-weight: bold; text-transform: uppercase; font-size: 13px; }
+.exp-company { color: #0033aa88; font-size: 11px; margin-bottom: 2px; }
+.exp-desc { color: #0033aa; font-size: 11px; }
+.divider { border-top: 1px solid #0033aa11; margin: 12px 0; }
 
 .icon-link {
     display: inline-flex;
@@ -89,10 +85,11 @@ body{
 /* IDENTITY (LOWERED) */
 #identity-panel {
     position: fixed;
-    bottom: 40px;
+    bottom: 50px;
     left: 50%;
     transform: translateX(-50%) scale(0.98);
-    width: 650px;
+    width: auto;
+    max-width: 600px;
     z-index: 20;
     opacity: 0;
     pointer-events: none;
@@ -101,10 +98,10 @@ body{
 #identity-panel.visible { opacity: 1; pointer-events: all; transform: translateX(-50%) scale(1); }
 
 #model-hint {
-    font-size: 9px;
+    font-size: 10px;
     color: #0033aa55;
     position: fixed;
-    bottom: 15px;
+    bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
     z-index: 5;
@@ -129,18 +126,17 @@ body{
             <div class="exp-company">GLOBAL MARKETS & COUNSELING — JUN – OCT 2025</div>
             <div class="exp-desc">Fine-tuned AI for internal resource streamlining • designed university outreach assets</div>
         </div>
-
         <div class="divider"></div>
         <div class="terminal-label">// education.dat</div>
         <div class="exp-item">
             <div class="exp-role">B.S. COMPUTER SCIENCE</div>
-            <div class="exp-company">IE UNIVERSITY, MADRID — 2023 – 2027</div>
-            <div class="exp-desc"><b>HIGH POTENTIAL SCHOLARSHIP</b><br>Machine Learning • Artificial Intelligence • Fullstack • Cloud Computing • Active IE Connects attendee</div>
+            <div class="exp-company">IE UNIVERSITY — 2023 – 2027</div>
+            <div class="exp-desc"><b>HIGH POTENTIAL SCHOLARSHIP</b><br>ML • AI • Fullstack • Cloud Computing</div>
         </div>
         <div class="exp-item">
             <div class="exp-role">EXCHANGE SEMESTER</div>
-            <div class="exp-company">TRINITY COLLEGE DUBLIN — AUG – DEC 2022</div>
-            <div class="exp-desc">CSU11001 • CSU11011 • CSU11021 • CSU11027 • CSU11031 • CSU11081</div>
+            <div class="exp-company">TRINITY COLLEGE DUBLIN — 2022</div>
+            <div class="exp-desc">CSU11001 • CSU11011 • CSU11021 • CSU11027 • CSU11031</div>
         </div>
     </div>
 
@@ -152,35 +148,26 @@ body{
         </div>
         <div class="exp-item">
             <div class="exp-role">UPLINK</div>
-            <a href="https://github.com" class="icon-link"><i class="fab fa-github"></i> GITHUB</a><br>
-            <a href="https://linkedin.com" class="icon-link"><i class="fab fa-linkedin"></i> LINKEDIN</a>
+            <a href="#" class="icon-link"><i class="fab fa-github"></i> GITHUB</a><br>
+            <a href="#" class="icon-link"><i class="fab fa-linkedin"></i> LINKEDIN</a>
         </div>
-        <div class="exp-item">
-            <div class="exp-role">LOC</div>
-            <div class="exp-desc">MADRID • BOGOTÁ</div>
-        </div>
-
         <div class="divider"></div>
         <div class="terminal-label">// certificates.dat</div>
         <div class="exp-item">
             <div class="exp-role">OIL & GAS INDUSTRY</div>
             <div class="exp-company">DUKE UNIVERSITY</div>
-            <div class="exp-desc">OPERATIONS & MARKETS SPECIALIZATION</div>
+            <div class="exp-desc">OPERATIONS & MARKETS</div>
         </div>
     </div>
 </div>
 
 <div id="identity-panel" class="terminal-box">
-    <div class="terminal-label">// identity.exe [ click character to close ]</div>
-    <div class="terminal-title">ANDREA MONTANA</div>
-    <div class="terminal-sub">CS & AI • CREATIVE SYSTEMS DESIGNER • MADRID_</div>
-    <div class="exp-desc" style="font-size:11px; margin-bottom:15px; opacity: 1;">
-        Connecting digital ecosystems with lived experiences through spatial computing research and creative systems design.
-    </div>
+    <div class="terminal-label">// identity.exe</div>
+    <div style="font-size: 24px; font-weight: bold; margin-bottom: 4px;">ANDREA MONTANA</div>
+    <div style="font-size: 11px; font-weight: bold; margin-bottom: 12px; color: #0033aa99;">CS & AI • CREATIVE SYSTEMS DESIGNER • MADRID_</div>
+    <div class="exp-desc" style="margin-bottom:15px; opacity: 1;">Connecting digital ecosystems with lived experiences through spatial computing research and creative systems design.</div>
     <div class="terminal-label">// skills.dat</div>
-    <div style="font-size:10px; line-height:1.8; color: #0033aa; opacity: 0.8;">
-        C • Python • Java • TypeScript • HTML / CSS • Blender • Three.js • Spatial Computing • VR / XR • OptiTrack • Machine Learning • Artificial Intelligence • Algorithms • Data Structures • MySQL • Docker • Fullstack • Cloud Computing • Canva • Affinity • Video Production
-    </div>
+    <div style="font-size:10px; line-height:1.8; opacity:0.8;">C • Python • Java • TypeScript • HTML / CSS • Blender • Three.js • Spatial Computing • VR / XR • Machine Learning • AI • Docker • Fullstack • Cloud</div>
 </div>
 
 <div id="model-hint">DRAG TO ROTATE | CLICK MODEL TO TOGGLE IDENTITY</div>
@@ -204,18 +191,18 @@ const mCanvas = document.getElementById('matrix-canvas');
 const ctx = mCanvas.getContext('2d');
 let w = mCanvas.width = window.innerWidth;
 let h = mCanvas.height = window.innerHeight;
-const chars = "0101010101ABCDEFHIJKLMNOPQRSTUVWXYZ";
-const drops = Array(Math.floor(w/14)).fill(1);
+const chars = "01";
+const drops = Array(Math.floor(w/20)).fill(1);
 
 function drawMatrix() {
-    ctx.fillStyle = 'rgba(240, 244, 255, 0.15)';
+    ctx.fillStyle = 'rgba(240, 244, 255, 0.1)';
     ctx.fillRect(0, 0, w, h);
     ctx.fillStyle = '#0033aa';
-    ctx.font = '14px monospace';
+    ctx.font = '15px monospace';
     drops.forEach((y, i) => {
         const text = chars[Math.floor(Math.random()*chars.length)];
-        ctx.fillText(text, i*14, y*14);
-        if(y*14 > h && Math.random() > 0.98) drops[i] = 0;
+        ctx.fillText(text, i*20, y*20);
+        if(y*20 > h && Math.random() > 0.98) drops[i] = 0;
         drops[i]++;
     });
 }
@@ -233,11 +220,25 @@ const controls = new OrbitControls(camera, canvas);
 controls.enableDamping = true;
 controls.target.set(0, 0.8, 0);
 
-scene.add(new THREE.AmbientLight(0xffffff, 1.8));
-const light = new THREE.DirectionalLight(0xffffff, 2);
-light.position.set(4, 6, 4);
+// Lighting
+scene.add(new THREE.AmbientLight(0xffffff, 1.5));
+const light = new THREE.DirectionalLight(0xffffff, 1.5);
+light.position.set(5, 10, 5);
 scene.add(light);
-scene.add(new THREE.GridHelper(20, 40, 0x0033aa, 0x0033aa22));
+
+// ORIGINAL GRID (Dark Blue)
+const grid = new THREE.GridHelper(20, 40, 0x0033aa, 0x0033aa22);
+scene.add(grid);
+
+// RESTORED FLOATING PARTICLES
+const partCount = 1000;
+const partGeom = new THREE.BufferGeometry();
+const partPos = new Float32Array(partCount * 3);
+for(let i=0; i<partCount*3; i++) partPos[i] = (Math.random() - 0.5) * 15;
+partGeom.setAttribute('position', new THREE.BufferAttribute(partPos, 3));
+const partMat = new THREE.PointsMaterial({color: 0x0033aa, size: 0.02, transparent: true, opacity: 0.5});
+const particles = new THREE.Points(partGeom, partMat);
+scene.add(particles);
 
 const loader = new GLTFLoader();
 let model;
@@ -274,6 +275,7 @@ canvas.addEventListener("click", () => {
 function animate() {
     requestAnimationFrame(animate);
     drawMatrix();
+    particles.rotation.y += 0.001; // Particle drift
     controls.update();
     renderer.render(scene, camera);
 }
