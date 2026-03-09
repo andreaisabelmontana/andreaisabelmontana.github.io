@@ -18,10 +18,10 @@
         padding: 40px; pointer-events: none;
     }
 
-    /* PERFECT WRAP: display table ensures the box ends exactly at the last line of text */
+    /* THE WRAP FIX: inline-table snaps the box dimensions to the text content exactly */
     .panel {
         pointer-events: all;
-        display: table; 
+        display: inline-table; 
         width: auto;
         height: auto;
         max-width: 420px;
@@ -29,16 +29,15 @@
 
     .terminal-box {
         border: 1px solid #0033aa;
-        background: rgba(255, 255, 255, 0.96);
+        background: rgba(255, 255, 255, 0.98);
         padding: 20px 25px;
         box-shadow: 0 0 20px rgba(0, 51, 170, 0.1);
     }
 
-    /* COMPILE TRANSITION */
     .compiling { animation: bootUp 0.6s steps(4) forwards; }
     @keyframes bootUp {
-        0% { opacity: 0; transform: translateY(10px); filter: brightness(3); }
-        100% { opacity: 1; transform: translateY(0); filter: brightness(1); }
+        0% { opacity: 0; transform: translateY(10px); }
+        100% { opacity: 1; transform: translateY(0); }
     }
 
     .hidden { display: none !important; }
@@ -51,18 +50,18 @@
     .divider { border-top: 1px solid #0033aa11; margin: 12px 0; }
     .icon-link { display: inline-flex; align-items: center; gap: 8px; color: #0033aa; text-decoration: none; font-weight: bold; margin-top: 4px; }
 
-    /* NAMETAG & HINT */
+    /* ELEMENTS */
     #nametag {
-        position: fixed; left: 50%; top: 35%; transform: translateX(-50%);
+        position: fixed; left: 50%; top: 32%; transform: translateX(-50%);
         background: #0033aa; color: white; padding: 4px 12px; font-size: 12px;
         z-index: 15; letter-spacing: 2px; pointer-events: none;
     }
-    #click-hint {
-        position: fixed; left: 50%; bottom: 120px; transform: translateX(-50%);
-        font-size: 10px; color: #0033aa; animation: blink 1s infinite;
-        z-index: 15; font-weight: bold;
+    #click-signal {
+        position: fixed; left: 50%; bottom: 180px; transform: translateX(-50%);
+        font-size: 11px; color: #0033aa; animation: pulse 1.5s infinite;
+        z-index: 15; font-weight: bold; text-align: center;
     }
-    @keyframes blink { 50% { opacity: 0; } }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 
     #identity-panel { position: fixed; bottom: 50px; left: 50%; transform: translateX(-50%); z-index: 20; }
 </style>
@@ -72,11 +71,11 @@
 <canvas id="matrix-canvas"></canvas>
 <canvas id="three-canvas"></canvas>
 
-<div id="nametag">ANDREA MONTANA</div>
-<div id="click-hint">>> CLICK_SYSTEM_CORE <<</div>
+<div id="nametag" class="hidden">ANDREA MONTANA</div>
+<div id="click-signal">>> CLICK CHARACTER TO INITIALIZE SYSTEM <<</div>
 
 <div class="ui-layer">
-    <div id="experience-panel" class="panel terminal-box hidden">
+    <div id="left-panel" class="panel terminal-box hidden">
         <div class="terminal-label">// experience.log</div>
         <div class="exp-item">
             <div class="exp-role">ROBOTICS LAB ASSISTANT</div>
@@ -97,7 +96,7 @@
         </div>
     </div>
 
-    <div id="contact-panel" class="panel terminal-box hidden">
+    <div id="right-panel" class="panel terminal-box hidden">
         <div class="terminal-label">// contact.cfg</div>
         <div class="exp-item">
             <div class="exp-role">DIRECT MAIL</div>
@@ -114,7 +113,7 @@
         <div class="exp-item">
             <div class="exp-role">B.S. COMPUTER SCIENCE</div>
             <div class="exp-company">IE UNIVERSITY, MADRID — 2023 – 2027</div>
-            <div class="exp-desc"><b>HIGH POTENTIAL SCHOLARSHIP</b><br>ML • AI • Fullstack</div>
+            <div class="exp-desc"><b>HIGH POTENTIAL SCHOLARSHIP</b><br>ML • AI • Fullstack • Cloud</div>
         </div>
     </div>
 </div>
@@ -126,7 +125,7 @@
     <div class="exp-desc" style="margin-bottom:12px;">Connecting digital ecosystems with lived experiences through spatial computing research and creative systems design.</div>
     <div class="terminal-label">// skills.dat</div>
     <div style="font-size:9px; line-height:1.6; color:#0033aa;">
-        C • Python • Java • TypeScript • Three.js • Spatial Computing • VR / XR • ML • AI • Fullstack • Cloud
+        C • Python • Java • TypeScript • Three.js • Spatial Computing • VR/XR • ML • AI • Fullstack • Cloud • Blender • OptiTrack
     </div>
 </div>
 
@@ -139,7 +138,7 @@ import * as THREE from "three";
 import {OrbitControls} from "three/addons/controls/OrbitControls.js";
 import {GLTFLoader} from "three/addons/loaders/GLTFLoader.js";
 
-// --- OG MATRIX RAIN ---
+// --- MATRIX RAIN ---
 const rainCanvas = document.getElementById('matrix-canvas');
 const rc = rainCanvas.getContext('2d');
 let w = rainCanvas.width = window.innerWidth;
@@ -165,30 +164,30 @@ renderer.setSize(w, h);
 
 const scene = new THREE.Scene();
 
-// FIXED CAMERA: Slightly above, looking down, model in lower third
+// Camera positioned slightly high, looking down
 const camera = new THREE.PerspectiveCamera(40, w/h, 0.1, 100);
-camera.position.set(0, 2.2, 5.5); 
+camera.position.set(0, 2.2, 5.0); 
 
 const controls = new OrbitControls(camera, canvas);
 controls.enableDamping = true;
-controls.target.set(0, 0.6, 0); 
+controls.target.set(0, 0.5, 0); 
 
-// LIGHTING: Well-lit front + navy shadow depth
-scene.add(new THREE.AmbientLight(0xffffff, 1.3));
-const sun = new THREE.DirectionalLight(0xffffff, 1.5);
-sun.position.set(2, 5, 4);
+// LIGHTING: Icy Blue Glow
+scene.add(new THREE.AmbientLight(0xffffff, 1.4));
+const sun = new THREE.DirectionalLight(0xffffff, 1.2);
+sun.position.set(5, 5, 5);
 scene.add(sun);
 
-const shadowPoint = new THREE.PointLight(0x000080, 5);
-shadowPoint.position.set(-3, 1, -2);
-scene.add(shadowPoint);
+const navyShadow = new THREE.PointLight(0x000080, 6);
+navyShadow.position.set(-3, 0.5, -2);
+scene.add(navyShadow);
 
 // OG Particles
 const pGeo = new THREE.BufferGeometry();
-const pPos = new Float32Array(500 * 3);
-for(let i=0; i<500*3; i++) pPos[i] = (Math.random()-0.5)*15;
+const pPos = new Float32Array(400 * 3);
+for(let i=0; i<400*3; i++) pPos[i] = (Math.random()-0.5)*15;
 pGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
-const particles = new THREE.Points(pGeo, new THREE.PointsMaterial({color: 0x0033aa, size: 0.03, transparent: true, opacity: 0.4}));
+const particles = new THREE.Points(pGeo, new THREE.PointsMaterial({color: 0x0033aa, size: 0.03, transparent: true, opacity: 0.3}));
 scene.add(particles);
 
 scene.add(new THREE.GridHelper(20, 40, 0xbbccff, 0xdee7ff));
@@ -200,9 +199,8 @@ loader.load('assets/lowpoly_female.glb', (gltf) => {
     model.traverse(n => {
         if(n.isMesh) {
             n.material = new THREE.MeshStandardMaterial({
-                color: 0x99ccff, // ICY BLUE
-                metalness: 0.1,
-                roughness: 0.4
+                color: 0xadd8e6, // ICY BLUE
+                metalness: 0.2, roughness: 0.3
             });
         }
     });
@@ -219,17 +217,16 @@ canvas.addEventListener("click", (e) => {
     mouse.y = -(e.clientY/h)*2+1;
     raycaster.setFromCamera(mouse, camera);
     if(model && raycaster.intersectObject(model, true).length > 0) {
-        // Toggle UI
+        // Toggle Visibility
         document.getElementById('identity-panel').classList.add('hidden');
-        document.getElementById('nametag').classList.add('hidden');
-        document.getElementById('click-hint').classList.add('hidden');
+        document.getElementById('click-signal').classList.add('hidden');
         
-        const exp = document.getElementById('experience-panel');
-        const con = document.getElementById('contact-panel');
-        exp.classList.remove('hidden');
-        con.classList.remove('hidden');
-        exp.classList.add('compiling');
-        con.classList.add('compiling');
+        document.getElementById('left-panel').classList.remove('hidden');
+        document.getElementById('right-panel').classList.remove('hidden');
+        document.getElementById('nametag').classList.remove('hidden');
+        
+        document.getElementById('left-panel').classList.add('compiling');
+        document.getElementById('right-panel').classList.add('compiling');
     }
 });
 
