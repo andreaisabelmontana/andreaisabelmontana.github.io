@@ -18,13 +18,14 @@
         padding: 40px; pointer-events: none;
     }
 
-    /* THE WRAP FIX: display: table snaps the box height/width to text exactly */
+    /* THE WRAP FIX: display: table snaps the box dimensions to the text content exactly */
     .panel {
         pointer-events: all;
         display: table; 
         width: auto;
         height: auto;
         max-width: 420px;
+        transition: opacity 0.4s ease;
     }
 
     .terminal-box {
@@ -32,12 +33,6 @@
         background: rgba(255, 255, 255, 0.98);
         padding: 20px 25px;
         box-shadow: 0 0 20px rgba(0, 51, 170, 0.1);
-    }
-
-    .compiling { animation: bootUp 0.6s steps(4) forwards; }
-    @keyframes bootUp {
-        0% { opacity: 0; transform: translateY(10px); }
-        100% { opacity: 1; transform: translateY(0); }
     }
 
     .hidden { display: none !important; }
@@ -50,18 +45,12 @@
     .divider { border-top: 1px solid #0033aa11; margin: 12px 0; }
     .icon-link { display: inline-flex; align-items: center; gap: 8px; color: #0033aa; text-decoration: none; font-weight: bold; margin-top: 4px; }
 
-    /* NAMETAG & UI ELEMENTS */
+    /* NAMETAG - ABOVE CHARACTER */
     #nametag {
-        position: fixed; left: 50%; top: 32%; transform: translateX(-50%);
-        background: #0033aa; color: white; padding: 4px 12px; font-size: 12px;
-        z-index: 15; letter-spacing: 2px; pointer-events: none;
+        position: fixed; left: 50%; top: 30%; transform: translateX(-50%);
+        background: #0033aa; color: white; padding: 4px 14px; font-size: 12px;
+        z-index: 15; letter-spacing: 2px; font-weight: bold; pointer-events: none;
     }
-    #click-signal {
-        position: fixed; left: 50%; bottom: 180px; transform: translateX(-50%);
-        font-size: 11px; color: #0033aa; animation: pulse 1.5s infinite;
-        z-index: 15; font-weight: bold; text-align: center;
-    }
-    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 
     #identity-panel { position: fixed; bottom: 50px; left: 50%; transform: translateX(-50%); z-index: 20; }
 </style>
@@ -72,7 +61,6 @@
 <canvas id="three-canvas"></canvas>
 
 <div id="nametag" class="hidden">ANDREA MONTANA</div>
-<div id="click-signal">>> CLICK CHARACTER TO INITIALIZE SYSTEM <<</div>
 
 <div class="ui-layer">
     <div id="left-panel" class="panel terminal-box hidden">
@@ -87,6 +75,20 @@
             <div class="exp-company">GLOBAL MARKETS & COUNSELING — JUN – OCT 2025</div>
             <div class="exp-desc">Fine-tuned AI for internal resource streamlining</div>
         </div>
+        
+        <div class="divider"></div>
+        <div class="terminal-label">// education.dat</div>
+        <div class="exp-item">
+            <div class="exp-role">B.S. COMPUTER SCIENCE</div>
+            <div class="exp-company">IE UNIVERSITY, MADRID — 2023 – 2027</div>
+            <div class="exp-desc"><b>HIGH POTENTIAL SCHOLARSHIP</b><br>Machine Learning • AI • Fullstack • Cloud Computing</div>
+        </div>
+        <div class="exp-item">
+            <div class="exp-role">EXCHANGE SEMESTER</div>
+            <div class="exp-company">TRINITY COLLEGE DUBLIN — 2022</div>
+            <div class="exp-desc">CSU11001 • CSU11011 • CSU11021 • CSU11027 • CSU11031</div>
+        </div>
+
         <div class="divider"></div>
         <div class="terminal-label">// certificates.dat</div>
         <div class="exp-item">
@@ -108,29 +110,17 @@
             <a href="https://linkedin.com/in/andreamontana" target="_blank" class="icon-link"><i class="fab fa-linkedin"></i> LINKEDIN/ANDREAMONTANA</a><br>
             <a href="https://youtube.com/@AndreaIsabelMontaña" target="_blank" class="icon-link"><i class="fab fa-youtube"></i> @ANDREAISABELMONTAÑA</a>
         </div>
-        <div class="divider"></div>
-        <div class="terminal-label">// education.dat</div>
-        <div class="exp-item">
-            <div class="exp-role">B.S. COMPUTER SCIENCE</div>
-            <div class="exp-company">IE UNIVERSITY, MADRID — 2023 – 2027</div>
-            <div class="exp-desc"><b>HIGH POTENTIAL SCHOLARSHIP</b><br>Machine Learning • AI • Fullstack</div>
-        </div>
-        <div class="exp-item">
-            <div class="exp-role">EXCHANGE SEMESTER</div>
-            <div class="exp-company">TRINITY COLLEGE DUBLIN — 2022</div>
-            <div class="exp-desc">CSU11001 • CSU11011 • CSU11021 • CSU11027 • CSU11031</div>
-        </div>
     </div>
 </div>
 
-<div id="identity-panel" class="panel terminal-box compiling">
+<div id="identity-panel" class="panel terminal-box">
     <div class="terminal-label">// identity.exe</div>
     <div style="font-size: 22px; font-weight: bold;">ANDREA MONTANA</div>
     <div style="font-size: 10px; margin-bottom: 10px; color: #0033aa99;">CS & AI • CREATIVE SYSTEMS DESIGNER</div>
     <div class="exp-desc" style="margin-bottom:12px;">Connecting digital ecosystems with lived experiences through spatial computing research and creative systems design.</div>
     <div class="terminal-label">// skills.dat</div>
     <div style="font-size:9px; line-height:1.6; color:#0033aa;">
-        C • Python • Java • TypeScript • Three.js • Spatial Computing • VR / XR • ML • AI • Fullstack • Cloud • Blender • OptiTrack • Algorithms • Data Structures
+        C • Python • Java • TypeScript • Three.js • Spatial Computing • VR/XR • ML • AI • Fullstack • Cloud • Blender • OptiTrack • Algorithms
     </div>
 </div>
 
@@ -169,20 +159,21 @@ renderer.setSize(w, h);
 
 const scene = new THREE.Scene();
 
-// Camera positioned above, looking down, grounded character
+// Camera positioned above, looking down at grounded model
 const camera = new THREE.PerspectiveCamera(40, w/h, 0.1, 100);
-camera.position.set(0, 2.5, 5.5); 
+camera.position.set(0, 2.2, 5.5); 
 
 const controls = new OrbitControls(camera, canvas);
 controls.enableDamping = true;
-controls.target.set(0, 0.5, 0); 
+controls.target.set(0, 0.6, 0); 
 
+// LIGHTING: Icy Blue + Navy Depth
 scene.add(new THREE.AmbientLight(0xffffff, 1.4));
 const sun = new THREE.DirectionalLight(0xffffff, 1.2);
 sun.position.set(5, 5, 5);
 scene.add(sun);
 
-const navyPoint = new THREE.PointLight(0x000080, 8);
+const navyPoint = new THREE.PointLight(0x000080, 7);
 navyPoint.position.set(-3, 0.5, -2);
 scene.add(navyPoint);
 
@@ -221,16 +212,16 @@ canvas.addEventListener("click", (e) => {
     mouse.y = -(e.clientY/h)*2+1;
     raycaster.setFromCamera(mouse, camera);
     if(model && raycaster.intersectObject(model, true).length > 0) {
-        // Toggle UI logic
-        document.getElementById('identity-panel').classList.add('hidden');
-        document.getElementById('click-signal').classList.add('hidden');
-        
-        document.getElementById('left-panel').classList.remove('hidden');
-        document.getElementById('right-panel').classList.remove('hidden');
-        document.getElementById('nametag').classList.remove('hidden');
-        
-        document.getElementById('left-panel').classList.add('compiling');
-        document.getElementById('right-panel').classList.add('compiling');
+        // REVERSIBLE TOGGLE
+        const idPanel = document.getElementById('identity-panel');
+        const leftPanel = document.getElementById('left-panel');
+        const rightPanel = document.getElementById('right-panel');
+        const tag = document.getElementById('nametag');
+
+        idPanel.classList.toggle('hidden');
+        leftPanel.classList.toggle('hidden');
+        rightPanel.classList.toggle('hidden');
+        tag.classList.toggle('hidden');
     }
 });
 
