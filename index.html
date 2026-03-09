@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CREATIVE SYSTEMS // RESUME.EXE</title>
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <style>
@@ -35,43 +36,6 @@ left:0;
 z-index:1;
 }
 
-const body = document.body;
-const identityPanel = document.getElementById("identity-panel");
-const mainLayout = document.getElementById("main-layout");
-
-threeCanvas.addEventListener("click", () => {
-
-  if (!hoveredModel) return;
-
-  inspecting = !inspecting;
-
-  if (inspecting) {
-
-    /* Activate inspect UI */
-    body.classList.add("inspect-mode");
-
-    /* Camera focus */
-    controls.target.set(
-      hoveredModel.position.x,
-      hoveredModel.position.y + 0.8,
-      hoveredModel.position.z
-    );
-
-    controls.minDistance = 0.6;
-
-  } else {
-
-    /* Restore normal UI */
-    body.classList.remove("inspect-mode");
-
-    controls.target.set(0, 0.8, 0);
-    controls.minDistance = 1.5;
-
-  }
-
-});
-
-  
 /* MAIN LAYOUT */
 #main-layout{
 position:fixed;
@@ -79,46 +43,16 @@ top:24px;
 left:24px;
 right:24px;
 bottom:40px;
+
 display:flex;
-gap:16px;
+justify-content:space-between;
 align-items:flex-start;
+
+gap:16px;
+
 pointer-events:none;
 z-index:10;
 transition:opacity .35s ease;
-}
-/* Hide resume panels during inspect mode */
-.inspect-mode #main-layout {
-  opacity: 0;
-  pointer-events: none;
-  transform: translateY(10px);
-  transition: opacity 0.35s ease, transform 0.35s ease;
-}
-
-/* Identity panel center animation */
-.inspect-mode #identity-panel {
-  opacity: 1;
-  pointer-events: all;
-  transform: translate(-50%, -50%);
-}
-
-/* Default hidden state */
-#identity-panel {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  max-width: 420px;
-  z-index: 15;
-
-  opacity: 0;
-  pointer-events: none;
-
-  transform: translate(-50%, -60%);
-  transition: opacity 0.35s ease, transform 0.35s ease;
-}
-
-#main-layout.hidden{
-opacity:0;
-pointer-events:none;
 }
 
 .left-panel{
@@ -256,6 +190,7 @@ z-index:20;
 <canvas id="matrix-canvas"></canvas>
 <canvas id="three-canvas"></canvas>
 
+<!-- IDENTITY PANEL -->
 <div id="identity-panel" class="terminal-box">
 
 <div class="terminal-label">// identity.exe</div>
@@ -274,8 +209,39 @@ C • Python • Java • TypeScript • HTML/CSS • Blender • Three.js • S
 
 </div>
 
+<!-- MAIN LAYOUT -->
 <div id="main-layout">
 
+<!-- CONTACT LEFT -->
+<div class="terminal-box right-panel">
+
+<div class="terminal-label">// contact.cfg</div>
+
+<div class="contact-row">
+
+<div class="contact-item">
+<span>EMAIL</span>
+<span>amontana.ieu2023@student.ie.edu</span>
+</div>
+
+<a href="https://github.com/" class="icon-link">
+<i class="fab fa-github"></i> github
+</a>
+
+<a href="https://linkedin.com/" class="icon-link">
+<i class="fab fa-linkedin"></i> linkedin
+</a>
+
+<div class="contact-item">
+<span>LOC</span>
+<span>Madrid • Bogotá</span>
+</div>
+
+</div>
+
+</div>
+
+<!-- EXPERIENCE RIGHT -->
 <div class="terminal-box left-panel">
 
 <div class="terminal-label">// experience.log</div>
@@ -306,34 +272,6 @@ Fine-tuned AI models for internal systems and outreach design
 <div class="exp-desc">
 Machine Learning • Artificial Intelligence • Fullstack • Cloud
 </div>
-</div>
-
-</div>
-
-<div class="terminal-box right-panel">
-
-<div class="terminal-label">// contact.cfg</div>
-
-<div class="contact-row">
-
-<div class="contact-item">
-<span>EMAIL</span>
-<span>amontana.ieu2023@student.ie.edu</span>
-</div>
-
-<a href="https://github.com/" class="icon-link">
-<i class="fab fa-github"></i> github
-</a>
-
-<a href="https://linkedin.com/" class="icon-link">
-<i class="fab fa-linkedin"></i> linkedin
-</a>
-
-<div class="contact-item">
-<span>LOC</span>
-<span>Madrid • Bogotá</span>
-</div>
-
 </div>
 
 </div>
@@ -396,6 +334,7 @@ setInterval(drawRain,45);
 /* THREE */
 
 const canvas=document.getElementById("three-canvas");
+
 const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});
 renderer.setSize(window.innerWidth,window.innerHeight);
 
@@ -459,12 +398,12 @@ inspecting=!inspecting;
 
 if(inspecting){
 identityPanel.classList.add("visible");
-mainLayout.classList.add("hidden");
+mainLayout.style.display="none";
 controls.target.set(0,.9,0);
 controls.minDistance=.6;
 }else{
 identityPanel.classList.remove("visible");
-mainLayout.classList.remove("hidden");
+mainLayout.style.display="flex";
 controls.target.set(0,.8,0);
 controls.minDistance=1.5;
 }
