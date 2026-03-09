@@ -14,11 +14,9 @@
         overflow: hidden;
     }
 
-    /* BACKGROUND LAYERS */
     #matrix-canvas { position: fixed; top: 0; left: 0; z-index: 0; opacity: 0.12; }
     #three-canvas { position: fixed; top: 0; left: 0; z-index: 1; }
 
-    /* UI LAYER - 3 COLUMN SYSTEM */
     .ui-layer {
         position: fixed;
         top: 0; left: 0;
@@ -40,7 +38,6 @@
 
     .hidden { opacity: 0; pointer-events: none; transform: translateY(15px); }
 
-    /* TERMINAL BOX STYLING */
     .terminal-box {
         border: 1px solid #0033aa;
         background: rgba(255,255,255,0.92);
@@ -58,7 +55,6 @@
         padding-bottom: 4px;
     }
 
-    /* CONTENT STYLING */
     .exp-item {
         margin-bottom: 14px;
         font-size: 11px;
@@ -81,7 +77,6 @@
         margin-top: 4px;
     }
 
-    /* IDENTITY (BOTTOM CENTER) */
     #identity-panel {
         position: fixed;
         bottom: 50px;
@@ -118,30 +113,28 @@
         <div class="exp-item">
             <div class="exp-role">ROBOTICS LAB ASSISTANT</div>
             <div class="exp-company">IE CYPHY LIFE — OCT 2025 – PRESENT</div>
-            <div class="exp-desc">Spatial computing research • OptiTrack motion capture • Blender 3D asset management • A/V production</div>
+            <div class="exp-desc">Spatial computing research • OptiTrack motion capture • Blender 3D asset management</div>
         </div>
         <div class="exp-item">
             <div class="exp-role">AI & DESIGN — PROJECTS 112 & 114</div>
             <div class="exp-company">GLOBAL MARKETS & COUNSELING — JUN – OCT 2025</div>
-            <div class="exp-desc">Fine-tuned AI for internal resource streamlining • designed university outreach assets</div>
+            <div class="exp-desc">Fine-tuned AI for internal resource streamlining</div>
         </div>
         
         <div class="divider"></div>
-        
         <div class="terminal-label">// education.dat</div>
         <div class="exp-item">
             <div class="exp-role">B.S. COMPUTER SCIENCE</div>
             <div class="exp-company">IE UNIVERSITY, MADRID — 2023 – 2027</div>
-            <div class="exp-desc"><b>HIGH POTENTIAL SCHOLARSHIP</b><br>Machine Learning • AI • Fullstack • Cloud Computing</div>
+            <div class="exp-desc"><b>HIGH POTENTIAL SCHOLARSHIP</b><br>Machine Learning • AI • Fullstack</div>
         </div>
         <div class="exp-item">
             <div class="exp-role">EXCHANGE SEMESTER</div>
-            <div class="exp-company">TRINITY COLLEGE DUBLIN — AUG – DEC 2022</div>
+            <div class="exp-company">TRINITY COLLEGE DUBLIN — 2022</div>
             <div class="exp-desc">CSU11001 • CSU11011 • CSU11021 • CSU11027 • CSU11031</div>
         </div>
         
         <div class="divider"></div>
-        
         <div class="terminal-label">// certificates.dat</div>
         <div class="exp-item">
             <div class="exp-role">OIL & GAS INDUSTRY</div>
@@ -170,12 +163,12 @@
 
 <div id="identity-panel" class="terminal-box">
     <div class="terminal-label">// identity.exe</div>
-    <div style="font-size: 24px; font-weight: bold; margin-bottom: 4px;">ANDREA MONTANA</div>
-    <div style="font-size: 11px; font-weight: bold; margin-bottom: 12px; color: #0033aa99;">CS & AI • CREATIVE SYSTEMS DESIGNER • MADRID_</div>
+    <div style="font-size: 24px; font-weight: bold;">ANDREA MONTANA</div>
+    <div style="font-size: 11px; margin-bottom: 12px; color: #0033aa99;">CS & AI • CREATIVE SYSTEMS DESIGNER • MADRID_</div>
     <div class="exp-desc" style="margin-bottom:15px;">Connecting digital ecosystems with lived experiences through spatial computing research and creative systems design.</div>
     <div class="terminal-label">// skills.dat</div>
     <div style="font-size:10px; line-height:1.8; color:#0033aa; opacity:0.8;">
-        C • Python • Java • TypeScript • HTML / CSS • Blender • Three.js • Spatial Computing • VR / XR • OptiTrack • Machine Learning • Artificial Intelligence • Algorithms • Data Structures • MySQL • Docker • Fullstack • Cloud Computing • Canva • Affinity • Video Production
+        C • Python • Java • TypeScript • Three.js • Spatial Computing • VR / XR • ML • AI • Fullstack • Cloud
     </div>
 </div>
 
@@ -195,7 +188,7 @@ import * as THREE from "three";
 import {OrbitControls} from "three/addons/controls/OrbitControls.js";
 import {GLTFLoader} from "three/addons/loaders/GLTFLoader.js";
 
-// ─── MATRIX BACKGROUND ──────────────────────────────────
+// --- MATRIX BG ---
 const rainCanvas = document.getElementById('matrix-canvas');
 const rc = rainCanvas.getContext('2d');
 let w = rainCanvas.width = window.innerWidth;
@@ -218,7 +211,7 @@ function drawRain() {
 }
 setInterval(drawRain, 45);
 
-// ─── THREE.JS ORIGINAL SCENE SETUP ──────────────────────
+// --- OG THREE.JS COLORS & SETUP ---
 const canvas = document.getElementById("three-canvas");
 const renderer = new THREE.WebGLRenderer({canvas, antialias: true, alpha: true});
 renderer.setSize(w, h);
@@ -231,9 +224,8 @@ camera.position.set(0, 1.5, 5);
 const controls = new OrbitControls(camera, canvas);
 controls.enableDamping = true;
 controls.target.set(0, 0.8, 0);
-controls.minDistance = 1.5;
 
-// ORIGINAL LIGHTING RIG
+// OG LIGHTING
 scene.add(new THREE.AmbientLight(0xffffff, 1.8));
 const mainLight = new THREE.DirectionalLight(0xffffff, 2.4);
 mainLight.position.set(4, 6, 4);
@@ -247,29 +239,18 @@ const rimLight = new THREE.DirectionalLight(0xaaccff, 1.2);
 rimLight.position.set(0, 4, -5);
 scene.add(rimLight);
 
-// ORIGINAL GRID FLOOR
-const gridHelper = new THREE.GridHelper(20, 30, 0x99bbee, 0xddeeff);
-gridHelper.position.y = -0.01;
-scene.add(gridHelper);
+// OG GRID
+scene.add(new THREE.GridHelper(20, 30, 0x99bbee, 0xddeeff));
 
-// ORIGINAL PARTICLE FIELD
+// OG PARTICLES
 const particleGeo = new THREE.BufferGeometry();
 const particleCount = 600;
 const positions = new Float32Array(particleCount * 3);
-for (let i = 0; i < particleCount * 3; i++) {
-    positions[i] = (Math.random() - 0.5) * 20;
-}
+for (let i = 0; i < particleCount * 3; i++) positions[i] = (Math.random() - 0.5) * 20;
 particleGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-const particleMat = new THREE.PointsMaterial({
-    color: 0x2244cc,
-    size: 0.04,
-    transparent: true,
-    opacity: 0.5
-});
-const particles = new THREE.Points(particleGeo, particleMat);
+const particles = new THREE.Points(particleGeo, new THREE.PointsMaterial({color: 0x2244cc, size: 0.04, transparent: true, opacity: 0.5}));
 scene.add(particles);
 
-// LOAD MODEL
 const loader = new GLTFLoader();
 let model;
 loader.load('assets/lowpoly_female.glb', (gltf) => {
@@ -300,14 +281,7 @@ canvas.addEventListener("click", () => {
         exp.classList.toggle("hidden", inspecting);
         con.classList.toggle("hidden", inspecting);
         iden.classList.toggle("visible", inspecting);
-        
-        if(inspecting) {
-            controls.target.set(0, 0.9, 0);
-            controls.minDistance = 0.6;
-        } else {
-            controls.target.set(0, 0.8, 0);
-            controls.minDistance = 1.5;
-        }
+        controls.minDistance = inspecting ? 0.6 : 1.5;
     }
 });
 
@@ -315,29 +289,21 @@ const clock = new THREE.Clock();
 function animate() {
     requestAnimationFrame(animate);
     const t = clock.getElapsedTime();
-    
-    // Original Floating Animation
     if(model) {
         model.position.y = Math.sin(t * 0.8) * 0.07;
         model.rotation.y = Math.sin(t * 0.3) * 0.12;
     }
-    
-    // Rotate Particles
     particles.rotation.y = t * 0.04;
-    
     controls.update();
     renderer.render(scene, camera);
 }
 animate();
 
 window.addEventListener('resize', () => {
-    w = window.innerWidth;
-    h = window.innerHeight;
-    camera.aspect = w/h;
-    camera.updateProjectionMatrix();
+    w = window.innerWidth; h = window.innerHeight;
+    camera.aspect = w/h; camera.updateProjectionMatrix();
     renderer.setSize(w, h);
-    rainCanvas.width = w;
-    rainCanvas.height = h;
+    rainCanvas.width = w; rainCanvas.height = h;
     drops = Array(Math.floor(w/fontSize)).fill(1);
 });
 </script>
