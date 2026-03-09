@@ -9,9 +9,8 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { background: #f0f4ff; color: #0033aa; font-family: 'Courier New', monospace; overflow: hidden; }
 
-    /* OG Effects - Re-Enabled */
-    #matrix-canvas { position: fixed; top: 0; left: 0; z-index: 0; opacity: 0.15; }
-    #three-canvas { position: fixed; top: 0; left: 0; z-index: 1; }
+    #matrix-canvas { position: fixed; top: 0; left: 0; z-index: 0; opacity: 0.15; pointer-events: none; }
+    #three-canvas { position: fixed; top: 0; left: 0; z-index: 1; cursor: pointer; }
 
     .ui-layer {
         position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -19,13 +18,13 @@
         padding: 40px; pointer-events: none;
     }
 
-    /* PERFECT WRAP FIX: display table wraps width and height to content only */
+    /* PERFECT WRAP: display table ensures the box ends exactly at the last line of text */
     .panel {
         pointer-events: all;
         display: table; 
         width: auto;
+        height: auto;
         max-width: 420px;
-        transition: opacity 0.4s ease;
     }
 
     .terminal-box {
@@ -35,13 +34,15 @@
         box-shadow: 0 0 20px rgba(0, 51, 170, 0.1);
     }
 
-    .compiling { animation: bootUp 0.6s steps(4); }
+    /* COMPILE TRANSITION */
+    .compiling { animation: bootUp 0.6s steps(4) forwards; }
     @keyframes bootUp {
-        0% { opacity: 0; filter: brightness(3); }
-        100% { opacity: 1; filter: brightness(1); }
+        0% { opacity: 0; transform: translateY(10px); filter: brightness(3); }
+        100% { opacity: 1; transform: translateY(0); filter: brightness(1); }
     }
 
-    .hidden { display: none; }
+    .hidden { display: none !important; }
+
     .terminal-label { font-size: 10px; color: #0033aa88; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 12px; border-bottom: 1px solid #0033aa33; padding-bottom: 4px; }
     .exp-item { margin-bottom: 14px; font-size: 11px; line-height: 1.5; border-left: 2px solid #0033aa44; padding-left: 12px; }
     .exp-role { color: #0033aa; font-weight: bold; text-transform: uppercase; font-size: 12px; }
@@ -49,6 +50,19 @@
     .exp-desc { color: #0033aa; font-size: 10px; }
     .divider { border-top: 1px solid #0033aa11; margin: 12px 0; }
     .icon-link { display: inline-flex; align-items: center; gap: 8px; color: #0033aa; text-decoration: none; font-weight: bold; margin-top: 4px; }
+
+    /* NAMETAG & HINT */
+    #nametag {
+        position: fixed; left: 50%; top: 35%; transform: translateX(-50%);
+        background: #0033aa; color: white; padding: 4px 12px; font-size: 12px;
+        z-index: 15; letter-spacing: 2px; pointer-events: none;
+    }
+    #click-hint {
+        position: fixed; left: 50%; bottom: 120px; transform: translateX(-50%);
+        font-size: 10px; color: #0033aa; animation: blink 1s infinite;
+        z-index: 15; font-weight: bold;
+    }
+    @keyframes blink { 50% { opacity: 0; } }
 
     #identity-panel { position: fixed; bottom: 50px; left: 50%; transform: translateX(-50%); z-index: 20; }
 </style>
@@ -58,8 +72,11 @@
 <canvas id="matrix-canvas"></canvas>
 <canvas id="three-canvas"></canvas>
 
+<div id="nametag">ANDREA MONTANA</div>
+<div id="click-hint">>> CLICK_SYSTEM_CORE <<</div>
+
 <div class="ui-layer">
-    <div id="experience-panel" class="panel terminal-box">
+    <div id="experience-panel" class="panel terminal-box hidden">
         <div class="terminal-label">// experience.log</div>
         <div class="exp-item">
             <div class="exp-role">ROBOTICS LAB ASSISTANT</div>
@@ -72,20 +89,15 @@
             <div class="exp-desc">Fine-tuned AI for internal resource streamlining</div>
         </div>
         <div class="divider"></div>
-        <div class="terminal-label">// education.dat</div>
+        <div class="terminal-label">// certificates.dat</div>
         <div class="exp-item">
-            <div class="exp-role">B.S. COMPUTER SCIENCE</div>
-            <div class="exp-company">IE UNIVERSITY, MADRID — 2023 – 2027</div>
-            <div class="exp-desc"><b>HIGH POTENTIAL SCHOLARSHIP</b><br>Machine Learning • AI • Fullstack</div>
-        </div>
-        <div class="exp-item">
-            <div class="exp-role">EXCHANGE SEMESTER</div>
-            <div class="exp-company">TRINITY COLLEGE DUBLIN — 2022</div>
-            <div class="exp-desc">CSU11001 • CSU11011 • CSU11021 • CSU11027 • CSU11031</div>
+            <div class="exp-role">OIL & GAS INDUSTRY</div>
+            <div class="exp-company">DUKE UNIVERSITY</div>
+            <div class="exp-desc">OPERATIONS & MARKETS SPECIALIZATION</div>
         </div>
     </div>
 
-    <div id="contact-panel" class="panel terminal-box">
+    <div id="contact-panel" class="panel terminal-box hidden">
         <div class="terminal-label">// contact.cfg</div>
         <div class="exp-item">
             <div class="exp-role">DIRECT MAIL</div>
@@ -98,16 +110,16 @@
             <a href="https://youtube.com/@AndreaIsabelMontaña" target="_blank" class="icon-link"><i class="fab fa-youtube"></i> @ANDREAISABELMONTAÑA</a>
         </div>
         <div class="divider"></div>
-        <div class="terminal-label">// certificates.dat</div>
+        <div class="terminal-label">// education.dat</div>
         <div class="exp-item">
-            <div class="exp-role">OIL & GAS INDUSTRY</div>
-            <div class="exp-company">DUKE UNIVERSITY</div>
-            <div class="exp-desc">OPERATIONS & MARKETS SPECIALIZATION</div>
+            <div class="exp-role">B.S. COMPUTER SCIENCE</div>
+            <div class="exp-company">IE UNIVERSITY, MADRID — 2023 – 2027</div>
+            <div class="exp-desc"><b>HIGH POTENTIAL SCHOLARSHIP</b><br>ML • AI • Fullstack</div>
         </div>
     </div>
 </div>
 
-<div id="identity-panel" class="panel terminal-box hidden">
+<div id="identity-panel" class="panel terminal-box compiling">
     <div class="terminal-label">// identity.exe</div>
     <div style="font-size: 22px; font-weight: bold;">ANDREA MONTANA</div>
     <div style="font-size: 10px; margin-bottom: 10px; color: #0033aa99;">CS & AI • CREATIVE SYSTEMS DESIGNER</div>
@@ -127,7 +139,7 @@ import * as THREE from "three";
 import {OrbitControls} from "three/addons/controls/OrbitControls.js";
 import {GLTFLoader} from "three/addons/loaders/GLTFLoader.js";
 
-// --- RAIN ---
+// --- OG MATRIX RAIN ---
 const rainCanvas = document.getElementById('matrix-canvas');
 const rc = rainCanvas.getContext('2d');
 let w = rainCanvas.width = window.innerWidth;
@@ -150,29 +162,31 @@ setInterval(drawRain, 50);
 const canvas = document.getElementById("three-canvas");
 const renderer = new THREE.WebGLRenderer({canvas, antialias: true, alpha: true});
 renderer.setSize(w, h);
-renderer.setPixelRatio(window.devicePixelRatio);
 
 const scene = new THREE.Scene();
 
-// Camera positioned slightly above, looking down at model in lower frame
+// FIXED CAMERA: Slightly above, looking down, model in lower third
 const camera = new THREE.PerspectiveCamera(40, w/h, 0.1, 100);
-camera.position.set(0, 1.8, 5); 
+camera.position.set(0, 2.2, 5.5); 
 
 const controls = new OrbitControls(camera, canvas);
 controls.enableDamping = true;
-controls.target.set(0, 0.5, 0); 
+controls.target.set(0, 0.6, 0); 
 
-// LIGHTING: Stronger front light + Rim light for depth
-scene.add(new THREE.AmbientLight(0xffffff, 1.2));
+// LIGHTING: Well-lit front + navy shadow depth
+scene.add(new THREE.AmbientLight(0xffffff, 1.3));
 const sun = new THREE.DirectionalLight(0xffffff, 1.5);
-sun.position.set(2, 4, 3);
+sun.position.set(2, 5, 4);
 scene.add(sun);
+
+const shadowPoint = new THREE.PointLight(0x000080, 5);
+shadowPoint.position.set(-3, 1, -2);
+scene.add(shadowPoint);
 
 // OG Particles
 const pGeo = new THREE.BufferGeometry();
-const pCount = 500;
-const pPos = new Float32Array(pCount * 3);
-for(let i=0; i<pCount*3; i++) pPos[i] = (Math.random()-0.5)*15;
+const pPos = new Float32Array(500 * 3);
+for(let i=0; i<500*3; i++) pPos[i] = (Math.random()-0.5)*15;
 pGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
 const particles = new THREE.Points(pGeo, new THREE.PointsMaterial({color: 0x0033aa, size: 0.03, transparent: true, opacity: 0.4}));
 scene.add(particles);
@@ -187,12 +201,12 @@ loader.load('assets/lowpoly_female.glb', (gltf) => {
         if(n.isMesh) {
             n.material = new THREE.MeshStandardMaterial({
                 color: 0x99ccff, // ICY BLUE
-                metalness: 0.2,
-                roughness: 0.3
+                metalness: 0.1,
+                roughness: 0.4
             });
         }
     });
-    model.scale.set(1.1, 1.1, 1.1);
+    model.scale.set(1.2, 1.2, 1.2);
     model.position.y = 0;
     scene.add(model);
 });
@@ -205,17 +219,22 @@ canvas.addEventListener("click", (e) => {
     mouse.y = -(e.clientY/h)*2+1;
     raycaster.setFromCamera(mouse, camera);
     if(model && raycaster.intersectObject(model, true).length > 0) {
-        document.getElementById('experience-panel').classList.toggle('hidden');
-        document.getElementById('contact-panel').classList.toggle('hidden');
-        const iden = document.getElementById('identity-panel');
-        iden.classList.toggle('hidden');
-        if(!iden.classList.contains('hidden')) iden.classList.add('compiling');
+        // Toggle UI
+        document.getElementById('identity-panel').classList.add('hidden');
+        document.getElementById('nametag').classList.add('hidden');
+        document.getElementById('click-hint').classList.add('hidden');
+        
+        const exp = document.getElementById('experience-panel');
+        const con = document.getElementById('contact-panel');
+        exp.classList.remove('hidden');
+        con.classList.remove('hidden');
+        exp.classList.add('compiling');
+        con.classList.add('compiling');
     }
 });
 
 function animate() {
     requestAnimationFrame(animate);
-    const t = performance.now() * 0.001;
     if(model) model.rotation.y += 0.005;
     particles.rotation.y += 0.001;
     controls.update();
