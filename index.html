@@ -3,140 +3,103 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CREATIVE SYSTEMS // RESUME.EXE</title>
+<title>ANDREA MONTANA // PORTFOLIO</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    
-    /* Desktop stays locked, Mobile gets vertical scrolling */
     body { background: #f0f4ff; color: #0033aa; font-family: 'Courier New', monospace; overflow-x: hidden; }
-    @media (min-width: 769px) { body { overflow-y: hidden; } }
 
-    #matrix-canvas { position: fixed; top: 0; left: 0; z-index: 0; opacity: 0.12; pointer-events: none; }
-    #three-canvas { position: fixed; top: 0; left: 0; z-index: 1; cursor: pointer; }
+    #three-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; z-index: 1; cursor: pointer; }
 
-    .ui-layer {
-        position: absolute; top: 0; left: 0; width: 100%; min-height: 100%;
-        z-index: 10; display: flex; justify-content: space-between;
-        padding: 40px; pointer-events: none;
+    .ui-wrapper {
+        position: relative; z-index: 10; pointer-events: none;
+        display: flex; flex-direction: column; align-items: center;
+        width: 100%; min-height: 100vh;
+    }
+
+    /* DESKTOP: Larger fonts, side-by-side, exact wrapping */
+    @media (min-width: 1025px) {
+        body { overflow-y: hidden; }
+        .ui-wrapper { flex-direction: row; justify-content: space-between; padding: 80px; height: 100vh; }
+        .panel { font-size: 14px; max-width: 450px; }
+        .role { font-size: 16px !important; }
+        .sub-text, .trinity-text { font-size: 13px !important; }
+        #identity-panel { position: absolute; bottom: 80px; left: 50%; transform: translateX(-50%); }
+    }
+
+    /* MOBILE: Stacks below model, scrollable */
+    @media (max-width: 1024px) {
+        .ui-wrapper { padding: 20px; padding-top: 65vh; }
+        .panel { width: 90%; margin-bottom: 20px; }
+        .role { font-size: 12px; }
+        .sub-text, .trinity-text { font-size: 11px; }
     }
 
     .panel {
         pointer-events: all;
-        display: table; 
-        width: auto;
-        max-width: 420px;
-        transition: opacity 0.4s ease;
-    }
-
-    .terminal-box {
-        border: 1px solid #0033aa;
         background: rgba(255, 255, 255, 0.98);
-        padding: 20px 25px;
-        box-shadow: 0 0 20px rgba(0, 51, 170, 0.1);
+        border: 1px solid #0033aa;
+        padding: 25px;
+        display: table; /* THIS SNAPS THE BOX TO TEXT SIZE */
+        width: auto;
+        box-shadow: 0 10px 30px rgba(0, 51, 170, 0.1);
     }
 
     .hidden { display: none !important; }
 
-    .terminal-label { font-size: 10px; color: #0033aa88; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 12px; border-bottom: 1px solid #0033aa33; padding-bottom: 4px; }
-    .exp-item { margin-bottom: 14px; font-size: 11px; line-height: 1.5; border-left: 2px solid #0033aa44; padding-left: 12px; }
-    .exp-role { color: #0033aa; font-weight: bold; text-transform: uppercase; font-size: 11px; }
-    .exp-company { color: #0033aa88; font-size: 10px; margin-bottom: 2px; }
-    .exp-desc { color: #0033aa; font-size: 10px; }
-    .divider { border-top: 1px solid #0033aa11; margin: 12px 0; }
-    .icon-link { display: inline-flex; align-items: center; gap: 8px; color: #0033aa; text-decoration: none; font-weight: bold; margin-top: 4px; }
+    /* Typography Hierarchy */
+    .label { font-size: 11px; color: #0033aa88; letter-spacing: 3px; text-transform: uppercase; border-bottom: 1px solid #0033aa22; margin-bottom: 12px; padding-bottom: 4px; width: 100%; }
+    .role { font-weight: bold; text-transform: uppercase; display: block; margin-bottom: 2px; }
+    .company { color: #0033aa99; font-size: 11px; margin-bottom: 6px; display: block; }
+    .sub-text { line-height: 1.6; color: #0033aa; display: block; }
+    
+    .trinity-text { font-weight: bold; text-transform: uppercase; margin-top: 10px; display: block; }
 
-    #nametag {
-        position: fixed; left: 50%; top: 25%; transform: translateX(-50%);
-        background: #0033aa; color: white; padding: 4px 14px; font-size: 12px;
-        z-index: 15; letter-spacing: 2px; font-weight: bold; pointer-events: none;
-    }
-
-    #identity-panel { position: fixed; bottom: 50px; left: 50%; transform: translateX(-50%); z-index: 20; }
-
-    /* --- MOBILE OVERHAUL --- */
-    @media (max-width: 768px) {
-        .ui-layer { 
-            flex-direction: column; 
-            align-items: center; 
-            padding: 20px;
-            padding-top: 65vh; /* Pushes content below the model header */
-        }
-        .panel { width: 92vw; max-width: 92vw; margin-bottom: 20px; }
-        #identity-panel { 
-            position: relative; bottom: auto; left: auto; transform: none; 
-            margin-top: 65vh; margin-bottom: 40px; 
-        }
-        #nametag { top: 20%; font-size: 10px; }
-        #three-canvas { height: 60vh !important; }
-    }
+    .divider { height: 1px; background: #0033aa11; margin: 18px 0; width: 100%; }
+    .link-group a { color: #0033aa; text-decoration: none; font-weight: bold; display: block; margin: 8px 0; }
 </style>
 </head>
 <body>
 
-<canvas id="matrix-canvas"></canvas>
 <canvas id="three-canvas"></canvas>
 
-<div id="nametag" class="hidden">ANDREA MONTANA</div>
-
-<div class="ui-layer">
-    <div id="left-panel" class="panel terminal-box hidden">
-        <div class="terminal-label">// experience.log</div>
-        <div class="exp-item">
-            <div class="exp-role">ROBOTICS LAB ASSISTANT</div>
-            <div class="exp-company">IE CYPHY LIFE — OCT 2025 – PRESENT</div>
-            <div class="exp-desc">Spatial computing research • OptiTrack motion capture • Blender 3D asset management</div>
-        </div>
-        <div class="exp-item">
-            <div class="exp-role">AI & DESIGN — PROJECTS 112 & 114</div>
-            <div class="exp-company">GLOBAL MARKETS & COUNSELING — JUN – OCT 2025</div>
-            <div class="exp-desc">Fine-tuned AI for internal resource streamlining</div>
-        </div>
+<div class="ui-wrapper">
+    <div id="resume-left" class="panel hidden">
+        <div class="label">// experience.log</div>
+        <div class="role">ROBOTICS LAB ASSISTANT</div>
+        <div class="company">IE CYPHY LIFE — OCT 2025 – PRESENT</div>
+        <div class="sub-text">Spatial computing research • OptiTrack motion capture • Blender 3D asset management</div>
         
         <div class="divider"></div>
-        <div class="terminal-label">// education.dat</div>
-        <div class="exp-item">
-            <div class="exp-role">B.S. COMPUTER SCIENCE</div>
-            <div class="exp-company">IE UNIVERSITY, MADRID — 2023 – 2027</div>
-            <div class="exp-desc"><b>HIGH POTENTIAL SCHOLARSHIP</b><br>Machine Learning • AI • Fullstack • Cloud Computing</div>
-        </div>
-        <div class="exp-item">
-            <div class="exp-desc" style="font-weight:bold; text-transform: uppercase;">TRINITY COLLEGE DUBLIN — 2022</div>
-            <div class="exp-desc">CSU11001 • CSU11011 • CSU11021 • CSU11027 • CSU11031</div>
-        </div>
+        
+        <div class="label">// education.dat</div>
+        <div class="role">B.S. COMPUTER SCIENCE</div>
+        <div class="company">IE UNIVERSITY, MADRID — 2023 – 2027</div>
+        <div class="sub-text"><b>HIGH POTENTIAL SCHOLARSHIP</b><br>Machine Learning • AI • Fullstack • Cloud Computing</div>
+        
+        <div class="trinity-text">TRINITY COLLEGE DUBLIN — 2022</div>
+        <div class="sub-text">CSU11001 • CSU11011 • CSU11021 • CSU11027 • CSU11031</div>
+    </div>
 
+    <div id="identity-panel" class="panel">
+        <div class="label">// identity.exe</div>
+        <div style="font-size: 24px; font-weight: bold; letter-spacing: -0.5px; margin-bottom: 5px;">ANDREA MONTANA</div>
+        <div class="sub-text" style="color: #0033aa88; margin-bottom: 15px; font-weight: bold;">CS & AI • CREATIVE SYSTEMS DESIGNER</div>
+        <div class="sub-text">Connecting digital ecosystems with lived experiences through spatial computing research and creative systems design.</div>
         <div class="divider"></div>
-        <div class="terminal-label">// certificates.dat</div>
-        <div class="exp-item">
-            <div class="exp-role">OIL & GAS INDUSTRY</div>
-            <div class="exp-company">DUKE UNIVERSITY</div>
-            <div class="exp-desc">OPERATIONS & MARKETS SPECIALIZATION</div>
-        </div>
+        <div class="label">// skills.dat</div>
+        <div class="sub-text" style="max-width: 350px;">Python • TypeScript • Three.js • Spatial Computing • VR/XR • ML • AI • Blender • OptiTrack</div>
     </div>
 
-    <div id="right-panel" class="panel terminal-box hidden">
-        <div class="terminal-label">// contact.cfg</div>
-        <div class="exp-item">
-            <div class="exp-role">DIRECT MAIL</div>
-            <div class="exp-desc">amontana.ieu2023@student.ie.edu</div>
+    <div id="resume-right" class="panel hidden">
+        <div class="label">// contact.cfg</div>
+        <div class="sub-text" style="font-weight: bold;">amontana.ieu2023@student.ie.edu</div>
+        <div class="divider"></div>
+        <div class="link-group">
+            <a href="https://github.com/amontana05" target="_blank"><i class="fab fa-github"></i> GITHUB</a>
+            <a href="https://linkedin.com/in/andreamontana" target="_blank"><i class="fab fa-linkedin"></i> LINKEDIN</a>
+            <a href="https://youtube.com/@AndreaIsabelMontaña" target="_blank"><i class="fab fa-youtube"></i> YOUTUBE</a>
         </div>
-        <div class="exp-item">
-            <div class="exp-role">UPLINK</div>
-            <a href="https://github.com/amontana05" target="_blank" class="icon-link"><i class="fab fa-github"></i> GITHUB</a><br>
-            <a href="https://linkedin.com/in/andreamontana" target="_blank" class="icon-link"><i class="fab fa-linkedin"></i> LINKEDIN</a><br>
-            <a href="https://youtube.com/@AndreaIsabelMontaña" target="_blank" class="icon-link"><i class="fab fa-youtube"></i> YOUTUBE</a>
-        </div>
-    </div>
-</div>
-
-<div id="identity-panel" class="panel terminal-box">
-    <div class="terminal-label">// identity.exe</div>
-    <div style="font-size: 20px; font-weight: bold;">ANDREA MONTANA</div>
-    <div style="font-size: 10px; margin-bottom: 10px; color: #0033aa99;">CS & AI • CREATIVE SYSTEMS DESIGNER</div>
-    <div class="exp-desc" style="margin-bottom:12px;">Connecting digital ecosystems with lived experiences through spatial computing research and creative systems design.</div>
-    <div class="terminal-label">// skills.dat</div>
-    <div style="font-size:9px; line-height:1.6; color:#0033aa;">
-        C • Python • Java • TypeScript • Three.js • Spatial Computing • VR/XR • ML • AI • Fullstack • Cloud • Blender • OptiTrack
     </div>
 </div>
 
@@ -149,41 +112,24 @@ import * as THREE from "three";
 import {OrbitControls} from "three/addons/controls/OrbitControls.js";
 import {GLTFLoader} from "three/addons/loaders/GLTFLoader.js";
 
-const rainCanvas = document.getElementById('matrix-canvas');
-const rc = rainCanvas.getContext('2d');
-let w = rainCanvas.width = window.innerWidth;
-let h = rainCanvas.height = window.innerHeight;
-const drops = Array(Math.floor(w/14)).fill(1);
-function drawRain() {
-    rc.fillStyle = "rgba(240,244,255,0.1)";
-    rc.fillRect(0, 0, w, h);
-    rc.fillStyle = "#0033aa";
-    rc.font = "14px monospace";
-    drops.forEach((y, i) => {
-        rc.fillText(Math.random() > 0.5 ? "0" : "1", i*14, y*14);
-        if(y*14 > h && Math.random() > 0.98) drops[i] = 0;
-        drops[i]++;
-    });
-}
-setInterval(drawRain, 50);
-
 const canvas = document.getElementById("three-canvas");
 const renderer = new THREE.WebGLRenderer({canvas, antialias: true, alpha: true});
-renderer.setSize(w, h);
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(window.devicePixelRatio);
 
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(40, w/h, 0.1, 100);
-camera.position.set(0, 2.0, 5.8); 
+const camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 0.1, 100);
+camera.position.set(0, 2, 6);
 
 const controls = new OrbitControls(camera, canvas);
 controls.enableDamping = true;
-controls.target.set(0, 0.6, 0); 
-controls.enableZoom = false;
+controls.enableZoom = false; 
+controls.target.set(0, 0.8, 0);
 
-scene.add(new THREE.AmbientLight(0xffffff, 1.4));
-const sun = new THREE.DirectionalLight(0xffffff, 1.0);
-sun.position.set(5, 5, 5);
-scene.add(sun);
+scene.add(new THREE.AmbientLight(0xffffff, 1.5));
+const light = new THREE.DirectionalLight(0xffffff, 1.2);
+light.position.set(5, 5, 5);
+scene.add(light);
 
 const loader = new GLTFLoader();
 let model;
@@ -192,8 +138,9 @@ loader.load('assets/lowpoly_female.glb', (gltf) => {
     model.traverse(n => {
         if(n.isMesh) {
             n.material = new THREE.MeshStandardMaterial({
-                color: 0xC8D1F7, // LIGHT PERIWINKLE
-                metalness: 0.1, roughness: 0.5
+                color: 0xC8D1F7, // PERIWINKLE
+                roughness: 0.4,
+                metalness: 0.1
             });
         }
     });
@@ -201,39 +148,37 @@ loader.load('assets/lowpoly_female.glb', (gltf) => {
     scene.add(model);
 });
 
-const raycaster = new THREE.Raycaster();
-const mouse = new THREE.Vector2();
+// Subtle Grid
+const grid = new THREE.GridHelper(20, 40, 0x0033aa, 0x0033aa);
+grid.material.opacity = 0.05;
+grid.material.transparent = true;
+scene.add(grid);
 
-function toggleUI() {
+function toggle() {
     document.getElementById('identity-panel').classList.toggle('hidden');
-    document.getElementById('left-panel').classList.toggle('hidden');
-    document.getElementById('right-panel').classList.toggle('hidden');
-    document.getElementById('nametag').classList.toggle('hidden');
-    // Scroll to top on mobile toggle for better UX
-    if(window.innerWidth <= 768) window.scrollTo({top: 0, behavior: 'smooth'});
+    document.getElementById('resume-left').classList.toggle('hidden');
+    document.getElementById('resume-right').classList.toggle('hidden');
 }
 
 canvas.addEventListener("click", (e) => {
-    mouse.x = (e.clientX/w)*2-1;
-    mouse.y = -(e.clientY/h)*2+1;
+    const mouse = new THREE.Vector2((e.clientX/window.innerWidth)*2-1, -(e.clientY/window.innerHeight)*2+1);
+    const raycaster = new THREE.Raycaster();
     raycaster.setFromCamera(mouse, camera);
-    if(model && raycaster.intersectObject(model, true).length > 0) {
-        toggleUI();
-    }
+    if(model && raycaster.intersectObject(model, true).length > 0) toggle();
 });
 
 function animate() {
     requestAnimationFrame(animate);
-    if(model) model.rotation.y += 0.005;
+    if(model) model.rotation.y += 0.004;
     controls.update();
     renderer.render(scene, camera);
 }
 animate();
 
 window.addEventListener('resize', () => {
-    w = window.innerWidth; h = window.innerHeight;
-    camera.aspect = w/h; camera.updateProjectionMatrix();
-    renderer.setSize(w, h);
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
 });
 </script>
 </body>
