@@ -15,133 +15,108 @@ body{
 }
 
 /* BACKGROUND LAYERS */
-#matrix-canvas{
-    position:fixed;
-    top:0;
-    left:0;
-    z-index:0;
-    opacity:.15;
-}
-#three-canvas{
-    position:fixed;
-    top:0;
-    left:0;
-    z-index:1;
-}
+#matrix-canvas{position:fixed;top:0;left:0;z-index:0;opacity:.15;}
+#three-canvas{position:fixed;top:0;left:0;z-index:1;}
 
-/* THREE-COLUMN GRID */
-.column-container {
-    position: relative;
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    width: 100vw;
-    height: 100vh;
-    padding: 40px;
+/* LAYOUT SYSTEM */
+.ui-layer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     z-index: 10;
+    display: flex;
+    justify-content: space-between;
+    padding: 30px;
     pointer-events: none;
 }
 
-.panel{
+.panel {
+    width: 380px;
     pointer-events: all;
     max-height: 85vh;
     overflow-y: auto;
-    scrollbar-width: none;
     transition: opacity .35s ease, transform .35s ease;
 }
-.panel::-webkit-scrollbar {display: none;}
 
-#experience-panel { grid-column: 1; }
-#contact-panel { grid-column: 3; }
-
-.hidden{opacity:0;pointer-events:none;transform:translateY(10px);}
+.hidden { opacity: 0; pointer-events: none; transform: translateY(15px); }
 
 /* TERMINAL BOX STYLING */
-.terminal-box{
-    border:1px solid #0033aa;
-    background:rgba(255,255,255,.94);
-    padding:24px;
-    box-shadow:0 0 20px #0033aa15;
+.terminal-box {
+    border: 1px solid #0033aa;
+    background: rgba(255,255,255,0.95);
+    padding: 20px;
+    box-shadow: 0 0 20px rgba(0,51,170,0.1);
 }
-.terminal-label{
-    font-size:10px;
-    color:#0033aa88;
-    letter-spacing:3px;
-    text-transform:uppercase;
-    margin-bottom:12px;
-    border-bottom:1px solid #0033aa33;
-    padding-bottom:6px;
-}
-.terminal-title{
-    font-size:24px;
-    font-weight:bold;
-    letter-spacing:2px;
-    margin-bottom:4px;
-}
-.terminal-sub{
-    font-size:11px;
-    color:#0033aa99;
-    font-weight: bold;
+
+.terminal-label {
+    font-size: 10px;
+    color: #0033aa88;
+    letter-spacing: 3px;
+    text-transform: uppercase;
     margin-bottom: 12px;
+    border-bottom: 1px solid #0033aa33;
+    padding-bottom: 6px;
 }
 
-.exp-item{
-    margin-bottom:16px;
-    font-size:11px;
-    line-height:1.5;
-    border-left:2px solid #0033aa44;
-    padding-left:12px;
+.terminal-title { font-size: 24px; font-weight: bold; letter-spacing: 2px; }
+.terminal-sub { font-size: 11px; color: #0033aa99; font-weight: bold; margin-bottom: 10px; }
+
+/* SHARED CONTENT STYLING */
+.exp-item {
+    margin-bottom: 16px;
+    font-size: 11px;
+    line-height: 1.5;
+    border-left: 2px solid #0033aa44;
+    padding-left: 12px;
 }
-.exp-role{color:#0033aa;font-weight:bold;text-transform: uppercase;}
-.exp-company{color:#0033aa88;font-size:10px;margin-bottom: 2px;}
-.exp-desc{color:#0033aa;font-size:10px; opacity: 0.9;}
+.exp-role { color: #0033aa; font-weight: bold; text-transform: uppercase; }
+.exp-company { color: #0033aa88; font-size: 10px; }
+.exp-desc { color: #0033aa; font-size: 10px; opacity: 0.9; }
+.divider { border-top: 1px solid #0033aa22; margin: 15px 0; }
 
-.divider{border-top:1px solid #0033aa22;margin:15px 0;}
-
-.icon-link{
-    display:inline-flex;
-    align-items:center;
-    gap:8px;
-    color:#0033aa;
-    text-decoration:none;
+.icon-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #0033aa;
+    text-decoration: none;
     font-weight: bold;
-    margin-top: 5px;
+    margin-top: 4px;
 }
 
 /* IDENTITY (LOWERED) */
-#identity-panel{
-    position:fixed;
-    bottom:60px; 
-    left:50%;
-    transform:translateX(-50%) scale(.98);
-    width:600px;
-    z-index:20;
-    opacity:0;
-    pointer-events:none;
-    transition:.35s;
+#identity-panel {
+    position: fixed;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%) scale(0.98);
+    width: 650px;
+    z-index: 20;
+    opacity: 0;
+    pointer-events: none;
+    transition: 0.35s;
 }
-#identity-panel.visible{
-    opacity:1;
-    pointer-events:all;
-    transform:translateX(-50%) scale(1);
-}
+#identity-panel.visible { opacity: 1; pointer-events: all; transform: translateX(-50%) scale(1); }
 
-#model-hint{
-    font-size:9px;
-    color:#0033aa44;
-    position:fixed;
-    bottom:15px;
-    left:50%;
-    transform:translateX(-50%);
-    z-index:5;
+#model-hint {
+    font-size: 9px;
+    color: #0033aa55;
+    position: fixed;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 5;
 }
 </style>
 </head>
 <body>
 
-<canvas id="matrix-canvas"></canvas> 
+<canvas id="matrix-canvas"></canvas>
 <canvas id="three-canvas"></canvas>
 
-<div class="column-container">
+<div class="ui-layer">
     <div id="experience-panel" class="panel terminal-box">
         <div class="terminal-label">// experience.log</div>
         <div class="exp-item">
@@ -154,12 +129,13 @@ body{
             <div class="exp-company">GLOBAL MARKETS & COUNSELING — JUN – OCT 2025</div>
             <div class="exp-desc">Fine-tuned AI for internal resource streamlining • designed university outreach assets</div>
         </div>
+
         <div class="divider"></div>
         <div class="terminal-label">// education.dat</div>
         <div class="exp-item">
             <div class="exp-role">B.S. COMPUTER SCIENCE</div>
             <div class="exp-company">IE UNIVERSITY, MADRID — 2023 – 2027</div>
-            <div class="exp-desc"><b>HIGH POTENTIAL SCHOLARSHIP</b><br>ML • AI • Fullstack • Cloud Computing • Active IE Connects attendee</div>
+            <div class="exp-desc"><b>HIGH POTENTIAL SCHOLARSHIP</b><br>Machine Learning • Artificial Intelligence • Fullstack • Cloud Computing • Active IE Connects attendee</div>
         </div>
         <div class="exp-item">
             <div class="exp-role">EXCHANGE SEMESTER</div>
@@ -168,21 +144,22 @@ body{
         </div>
     </div>
 
-    <div></div> <div id="contact-panel" class="panel terminal-box">
+    <div id="contact-panel" class="panel terminal-box">
         <div class="terminal-label">// contact.cfg</div>
         <div class="exp-item">
-            <div class="exp-role">DIRECT_MAIL</div>
+            <div class="exp-role">DIRECT MAIL</div>
             <div class="exp-desc">amontana.ieu2023@student.ie.edu</div>
         </div>
         <div class="exp-item">
-            <div class="exp-role">SOCIAL_UPLINK</div>
-            <a href="#" class="icon-link"><i class="fab fa-github"></i> GITHUB</a><br>
-            <a href="#" class="icon-link"><i class="fab fa-linkedin"></i> LINKEDIN</a>
+            <div class="exp-role">UPLINK</div>
+            <a href="https://github.com" class="icon-link"><i class="fab fa-github"></i> GITHUB</a><br>
+            <a href="https://linkedin.com" class="icon-link"><i class="fab fa-linkedin"></i> LINKEDIN</a>
         </div>
         <div class="exp-item">
-            <div class="exp-role">LOCATION_DATA</div>
+            <div class="exp-role">LOC</div>
             <div class="exp-desc">MADRID • BOGOTÁ</div>
         </div>
+
         <div class="divider"></div>
         <div class="terminal-label">// certificates.dat</div>
         <div class="exp-item">
@@ -197,23 +174,23 @@ body{
     <div class="terminal-label">// identity.exe [ click character to close ]</div>
     <div class="terminal-title">ANDREA MONTANA</div>
     <div class="terminal-sub">CS & AI • CREATIVE SYSTEMS DESIGNER • MADRID_</div>
-    <div class="exp-desc" style="font-size:11px; margin-bottom:15px;">
+    <div class="exp-desc" style="font-size:11px; margin-bottom:15px; opacity: 1;">
         Connecting digital ecosystems with lived experiences through spatial computing research and creative systems design.
     </div>
     <div class="terminal-label">// skills.dat</div>
-    <div style="font-size:10px; line-height:1.8; opacity:0.8;">
+    <div style="font-size:10px; line-height:1.8; color: #0033aa; opacity: 0.8;">
         C • Python • Java • TypeScript • HTML / CSS • Blender • Three.js • Spatial Computing • VR / XR • OptiTrack • Machine Learning • Artificial Intelligence • Algorithms • Data Structures • MySQL • Docker • Fullstack • Cloud Computing • Canva • Affinity • Video Production
     </div>
 </div>
 
-<div id="model-hint">DRAG TO ROTATE | CLICK MODEL TO TOGGLE IDENTITY.EXE</div>
+<div id="model-hint">DRAG TO ROTATE | CLICK MODEL TO TOGGLE IDENTITY</div>
 
 <script type="importmap">
 {
-"imports":{
-"three":"https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js",
-"three/addons/":"https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"
-}
+    "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"
+    }
 }
 </script>
 
@@ -222,36 +199,34 @@ import * as THREE from "three";
 import {OrbitControls} from "three/addons/controls/OrbitControls.js";
 import {GLTFLoader} from "three/addons/loaders/GLTFLoader.js";
 
-// --- MATRIX BACKGROUND ---
+// --- MATRIX BG ---
 const mCanvas = document.getElementById('matrix-canvas');
 const ctx = mCanvas.getContext('2d');
-let width = mCanvas.width = window.innerWidth;
-let height = mCanvas.height = window.innerHeight;
-const letters = "0101010101ABCDEFHIJKLMNOPQRSTUVWXYZ";
-const fontSize = 14;
-const columns = width / fontSize;
-const drops = Array(Math.floor(columns)).fill(1);
+let w = mCanvas.width = window.innerWidth;
+let h = mCanvas.height = window.innerHeight;
+const chars = "0101010101ABCDEFHIJKLMNOPQRSTUVWXYZ";
+const drops = Array(Math.floor(w/14)).fill(1);
 
 function drawMatrix() {
-    ctx.fillStyle = 'rgba(240, 244, 255, 0.1)';
-    ctx.fillRect(0, 0, width, height);
+    ctx.fillStyle = 'rgba(240, 244, 255, 0.15)';
+    ctx.fillRect(0, 0, w, h);
     ctx.fillStyle = '#0033aa';
-    ctx.font = fontSize + 'px monospace';
-    for (let i = 0; i < drops.length; i++) {
-        const text = letters.charAt(Math.floor(Math.random() * letters.length));
-        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-        if (drops[i] * fontSize > height && Math.random() > 0.975) drops[i] = 0;
+    ctx.font = '14px monospace';
+    drops.forEach((y, i) => {
+        const text = chars[Math.floor(Math.random()*chars.length)];
+        ctx.fillText(text, i*14, y*14);
+        if(y*14 > h && Math.random() > 0.98) drops[i] = 0;
         drops[i]++;
-    }
+    });
 }
 
-// --- THREE.JS SETUP ---
+// --- THREE.JS ---
 const canvas = document.getElementById("three-canvas");
-const renderer = new THREE.WebGLRenderer({canvas, alpha:true, antialias:true});
-renderer.setSize(window.innerWidth, window.innerHeight);
+const renderer = new THREE.WebGLRenderer({canvas, alpha: true, antialias: true});
+renderer.setSize(w, h);
 
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(45, window.innerWidth/window.innerHeight, 0.1, 1000);
+const camera = new THREE.PerspectiveCamera(45, w/h, 0.1, 1000);
 camera.position.set(0, 1.2, 5);
 
 const controls = new OrbitControls(camera, canvas);
@@ -262,7 +237,7 @@ scene.add(new THREE.AmbientLight(0xffffff, 1.8));
 const light = new THREE.DirectionalLight(0xffffff, 2);
 light.position.set(4, 6, 4);
 scene.add(light);
-scene.add(new THREE.GridHelper(20, 40, 0x0033aa, 0xddeeff));
+scene.add(new THREE.GridHelper(20, 40, 0x0033aa, 0x0033aa22));
 
 const loader = new GLTFLoader();
 let model;
@@ -275,12 +250,13 @@ loader.load("assets/lowpoly_female.glb", (gltf) => {
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
 canvas.addEventListener("mousemove", (e) => {
-    mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
-    mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+    mouse.x = (e.clientX/w)*2-1;
+    mouse.y = -(e.clientY/h)*2+1;
 });
 
-const panels = [document.getElementById("contact-panel"), document.getElementById("experience-panel")];
-const identityPanel = document.getElementById("identity-panel");
+const exp = document.getElementById("experience-panel");
+const con = document.getElementById("contact-panel");
+const iden = document.getElementById("identity-panel");
 let inspecting = false;
 
 canvas.addEventListener("click", () => {
@@ -289,25 +265,26 @@ canvas.addEventListener("click", () => {
     const hits = raycaster.intersectObject(model, true);
     if(hits.length > 0) {
         inspecting = !inspecting;
-        panels.forEach(p => p.classList.toggle("hidden", inspecting));
-        identityPanel.classList.toggle("visible", inspecting);
+        exp.classList.toggle("hidden", inspecting);
+        con.classList.toggle("hidden", inspecting);
+        iden.classList.toggle("visible", inspecting);
     }
 });
 
 function animate() {
     requestAnimationFrame(animate);
-    drawMatrix(); // Render Matrix background
+    drawMatrix();
     controls.update();
     renderer.render(scene, camera);
 }
 animate();
 
 window.addEventListener("resize", () => {
-    width = mCanvas.width = window.innerWidth;
-    height = mCanvas.height = window.innerHeight;
-    camera.aspect = window.innerWidth / window.innerHeight;
+    w = mCanvas.width = window.innerWidth;
+    h = mCanvas.height = window.innerHeight;
+    camera.aspect = w/h;
     camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setSize(w, h);
 });
 </script>
 </body>
