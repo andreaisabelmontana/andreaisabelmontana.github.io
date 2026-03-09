@@ -35,6 +35,43 @@ left:0;
 z-index:1;
 }
 
+const body = document.body;
+const identityPanel = document.getElementById("identity-panel");
+const mainLayout = document.getElementById("main-layout");
+
+threeCanvas.addEventListener("click", () => {
+
+  if (!hoveredModel) return;
+
+  inspecting = !inspecting;
+
+  if (inspecting) {
+
+    /* Activate inspect UI */
+    body.classList.add("inspect-mode");
+
+    /* Camera focus */
+    controls.target.set(
+      hoveredModel.position.x,
+      hoveredModel.position.y + 0.8,
+      hoveredModel.position.z
+    );
+
+    controls.minDistance = 0.6;
+
+  } else {
+
+    /* Restore normal UI */
+    body.classList.remove("inspect-mode");
+
+    controls.target.set(0, 0.8, 0);
+    controls.minDistance = 1.5;
+
+  }
+
+});
+
+  
 /* MAIN LAYOUT */
 #main-layout{
 position:fixed;
