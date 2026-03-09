@@ -18,7 +18,7 @@
         padding: 40px; pointer-events: none;
     }
 
-    /* THE WRAP FIX: display: table snaps the box dimensions to the text content exactly */
+    /* THE WRAP FIX: snaps height/width to text */
     .panel {
         pointer-events: all;
         display: table; 
@@ -45,7 +45,6 @@
     .divider { border-top: 1px solid #0033aa11; margin: 12px 0; }
     .icon-link { display: inline-flex; align-items: center; gap: 8px; color: #0033aa; text-decoration: none; font-weight: bold; margin-top: 4px; }
 
-    /* NAMETAG - ABOVE CHARACTER */
     #nametag {
         position: fixed; left: 50%; top: 30%; transform: translateX(-50%);
         background: #0033aa; color: white; padding: 4px 14px; font-size: 12px;
@@ -53,6 +52,16 @@
     }
 
     #identity-panel { position: fixed; bottom: 50px; left: 50%; transform: translateX(-50%); z-index: 20; }
+
+    /* --- MOBILE OVERRIDES --- */
+    @media (max-width: 768px) {
+        .ui-layer { padding: 15px; flex-direction: column; justify-content: flex-start; gap: 10px; }
+        .panel { max-width: 92vw; padding: 15px; }
+        .exp-role { font-size: 10px; }
+        .exp-desc, .exp-item { font-size: 9px; }
+        #identity-panel { bottom: 20px; width: 92vw; }
+        #nametag { top: 25%; font-size: 10px; }
+    }
 </style>
 </head>
 <body>
@@ -84,7 +93,7 @@
             <div class="exp-desc"><b>HIGH POTENTIAL SCHOLARSHIP</b><br>Machine Learning • AI • Fullstack • Cloud Computing</div>
         </div>
         <div class="exp-item">
-           
+            <div class="exp-role">EXCHANGE SEMESTER</div>
             <div class="exp-company">TRINITY COLLEGE DUBLIN — 2022</div>
             <div class="exp-desc">CSU11001 • CSU11011 • CSU11021 • CSU11027 • CSU11031</div>
         </div>
@@ -106,21 +115,21 @@
         </div>
         <div class="exp-item">
             <div class="exp-role">UPLINK</div>
-            <a href="https://github.com/amontana05" target="_blank" class="icon-link"><i class="fab fa-github"></i> GITHUB/AMONTANA05</a><br>
-            <a href="https://linkedin.com/in/andreamontana" target="_blank" class="icon-link"><i class="fab fa-linkedin"></i> LINKEDIN/ANDREAMONTANA</a><br>
-            <a href="https://youtube.com/@AndreaIsabelMontaña" target="_blank" class="icon-link"><i class="fab fa-youtube"></i> @ANDREAISABELMONTAÑA</a>
+            <a href="https://github.com/amontana05" target="_blank" class="icon-link"><i class="fab fa-github"></i> GITHUB</a><br>
+            <a href="https://linkedin.com/in/andreamontana" target="_blank" class="icon-link"><i class="fab fa-linkedin"></i> LINKEDIN</a><br>
+            <a href="https://youtube.com/@AndreaIsabelMontaña" target="_blank" class="icon-link"><i class="fab fa-youtube"></i> YOUTUBE</a>
         </div>
     </div>
 </div>
 
 <div id="identity-panel" class="panel terminal-box">
     <div class="terminal-label">// identity.exe</div>
-    <div style="font-size: 22px; font-weight: bold;">ANDREA MONTANA</div>
+    <div style="font-size: 20px; font-weight: bold;">ANDREA MONTANA</div>
     <div style="font-size: 10px; margin-bottom: 10px; color: #0033aa99;">CS & AI • CREATIVE SYSTEMS DESIGNER</div>
     <div class="exp-desc" style="margin-bottom:12px;">Connecting digital ecosystems with lived experiences through spatial computing research and creative systems design.</div>
     <div class="terminal-label">// skills.dat</div>
     <div style="font-size:9px; line-height:1.6; color:#0033aa;">
-        C • Python • Java • TypeScript • Three.js • Spatial Computing • VR/XR • ML • AI • Fullstack • Cloud • Blender • OptiTrack • Algorithms
+        C • Python • Java • TypeScript • Three.js • Spatial Computing • VR/XR • ML • AI • Fullstack • Cloud • Blender • OptiTrack
     </div>
 </div>
 
@@ -158,16 +167,13 @@ const renderer = new THREE.WebGLRenderer({canvas, antialias: true, alpha: true})
 renderer.setSize(w, h);
 
 const scene = new THREE.Scene();
-
-// Camera positioned above, looking down at grounded model
 const camera = new THREE.PerspectiveCamera(40, w/h, 0.1, 100);
-camera.position.set(0, 2.2, 5.5); 
+camera.position.set(0, 2.2, 6.0); 
 
 const controls = new OrbitControls(camera, canvas);
 controls.enableDamping = true;
 controls.target.set(0, 0.6, 0); 
 
-// LIGHTING: Icy Blue + Navy Depth
 scene.add(new THREE.AmbientLight(0xffffff, 1.4));
 const sun = new THREE.DirectionalLight(0xffffff, 1.2);
 sun.position.set(5, 5, 5);
@@ -179,8 +185,8 @@ scene.add(navyPoint);
 
 // OG Particles
 const pGeo = new THREE.BufferGeometry();
-const pPos = new Float32Array(400 * 3);
-for(let i=0; i<400*3; i++) pPos[i] = (Math.random()-0.5)*15;
+const pPos = new Float32Array(300 * 3);
+for(let i=0; i<300*3; i++) pPos[i] = (Math.random()-0.5)*15;
 pGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
 const particles = new THREE.Points(pGeo, new THREE.PointsMaterial({color: 0x0033aa, size: 0.03, transparent: true, opacity: 0.3}));
 scene.add(particles);
@@ -207,21 +213,19 @@ loader.load('assets/lowpoly_female.glb', (gltf) => {
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
 
+function toggleUI() {
+    document.getElementById('identity-panel').classList.toggle('hidden');
+    document.getElementById('left-panel').classList.toggle('hidden');
+    document.getElementById('right-panel').classList.toggle('hidden');
+    document.getElementById('nametag').classList.toggle('hidden');
+}
+
 canvas.addEventListener("click", (e) => {
     mouse.x = (e.clientX/w)*2-1;
     mouse.y = -(e.clientY/h)*2+1;
     raycaster.setFromCamera(mouse, camera);
     if(model && raycaster.intersectObject(model, true).length > 0) {
-        // REVERSIBLE TOGGLE
-        const idPanel = document.getElementById('identity-panel');
-        const leftPanel = document.getElementById('left-panel');
-        const rightPanel = document.getElementById('right-panel');
-        const tag = document.getElementById('nametag');
-
-        idPanel.classList.toggle('hidden');
-        leftPanel.classList.toggle('hidden');
-        rightPanel.classList.toggle('hidden');
-        tag.classList.toggle('hidden');
+        toggleUI();
     }
 });
 
